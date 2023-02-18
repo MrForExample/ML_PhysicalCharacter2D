@@ -30,7 +30,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ColorMask:
-        m_Texture: {fileID: 2800000, guid: 708723c2ae919294aaf5c10ef70218c8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 828e1099fa2481440bb18ff04d01d26a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -90,8 +90,8 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color1: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _Color2: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _Color3: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _Color1: {r: 0.58548164, g: 0.057275295, b: 0.057275295, a: 1}
+    - _Color2: {r: 0.85294116, g: 0.65397924, b: 0.22577855, a: 1}
+    - _Color3: {r: 0.85294116, g: 0.65397924, b: 0.22577855, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
