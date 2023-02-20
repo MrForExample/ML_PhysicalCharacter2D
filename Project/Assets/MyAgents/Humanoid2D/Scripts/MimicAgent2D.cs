@@ -7,7 +7,7 @@ using Unity.MLAgents.Sensors;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 using Random = UnityEngine.Random;
 
-public class WalkerAgent2D : Agent
+public class MimicAgent2D : Agent
 {
     [Header("Walk Speed")]
     [Range(0.1f, 10)]
