@@ -7,296 +7,312 @@ using Unity.MLAgents.Sensors;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 using Random = UnityEngine.Random;
 
-public class MimicAgent2D : Agent
+namespace PhysicalCharacter2D
 {
-    [Header("Walk Speed")]
-    [Range(0.1f, 10)]
-    [SerializeField]
-    //The walking speed to try and achieve
-    private float m_TargetWalkingSpeed = 10;
-
-    public float MTargetWalkingSpeed // property
+    public class MimicAgent2D : Agent
     {
-        get { return m_TargetWalkingSpeed; }
-        set { m_TargetWalkingSpeed = Mathf.Clamp(value, .1f, m_maxWalkingSpeed); }
-    }
+        [Header("Reference motion")]
+        public AnimatorReferencer animatorReferencer;
 
-    const float m_maxWalkingSpeed = 10; //The max walking speed
+        [Header("Walk Speed")]
+        [Range(0.1f, 10)]
+        [SerializeField]
+        //The walking speed to try and achieve
+        private float m_TargetWalkingSpeed = 10;
 
-    //Should the agent sample a new goal velocity each episode?
-    //If true, walkSpeed will be randomly set between zero and m_maxWalkingSpeed in OnEpisodeBegin()
-    //If false, the goal velocity will be walkingSpeed
-    public bool randomizeWalkSpeedEachEpisode;
-
-    //The direction an agent will walk during training.
-    private Vector3 m_WorldDirToWalk = Vector3.right;
-
-    [Header("Target To Walk Towards")] public Transform target; //Target the agent will walk towards during training.
-
-    [Header("Body Parts")]
-    public Transform hips;
-    public Transform spine;
-    public Transform head;
-    public Transform thighL;
-    public Transform shinL;
-    public Transform footL;
-    public Transform thighR;
-    public Transform shinR;
-    public Transform footR;
-    public Transform armL;
-    public Transform forearmL;
-    public Transform handL;
-    public Transform armR;
-    public Transform forearmR;
-    public Transform handR;
-
-    //This will be used as a stabilized model space reference point for observations
-    //Because ragdolls can move erratically during training, using a stabilized reference transform improves learning
-    OrientationCubeController m_OrientationCube;
-
-    //The indicator graphic gameobject that points towards the target
-    DirectionIndicator m_DirectionIndicator;
-    JointDriveController m_JdController;
-    EnvironmentParameters m_ResetParams;
-
-    public override void Initialize()
-    {
-        m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
-        m_DirectionIndicator = GetComponentInChildren<DirectionIndicator>();
-
-        //Setup each body part
-        m_JdController = GetComponent<JointDriveController>();
-        m_JdController.SetupBodyPart(hips);
-        m_JdController.SetupBodyPart(spine);
-        m_JdController.SetupBodyPart(head);
-        m_JdController.SetupBodyPart(thighL);
-        m_JdController.SetupBodyPart(shinL);
-        m_JdController.SetupBodyPart(footL);
-        m_JdController.SetupBodyPart(thighR);
-        m_JdController.SetupBodyPart(shinR);
-        m_JdController.SetupBodyPart(footR);
-        m_JdController.SetupBodyPart(armL);
-        m_JdController.SetupBodyPart(forearmL);
-        m_JdController.SetupBodyPart(handL);
-        m_JdController.SetupBodyPart(armR);
-        m_JdController.SetupBodyPart(forearmR);
-        m_JdController.SetupBodyPart(handR);
-
-        m_ResetParams = Academy.Instance.EnvironmentParameters;
-
-        SetResetParameters();
-    }
-
-    /// <summary>
-    /// Loop over body parts and reset them to initial conditions.
-    /// </summary>
-    public override void OnEpisodeBegin()
-    {
-        //Reset all of the body parts
-        foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
+        public float MTargetWalkingSpeed // property
         {
-            bodyPart.Reset(bodyPart);
+            get { return m_TargetWalkingSpeed; }
+            set { m_TargetWalkingSpeed = Mathf.Clamp(value, .1f, m_maxWalkingSpeed); }
         }
 
-        UpdateOrientationObjects();
+        const float m_maxWalkingSpeed = 10; //The max walking speed
 
-        //Set our goal walking speed
-        MTargetWalkingSpeed =
-            randomizeWalkSpeedEachEpisode ? Random.Range(0.1f, m_maxWalkingSpeed) : MTargetWalkingSpeed;
+        //Should the agent sample a new goal velocity each episode?
+        //If true, walkSpeed will be randomly set between zero and m_maxWalkingSpeed in OnEpisodeBegin()
+        //If false, the goal velocity will be walkingSpeed
+        public bool randomizeWalkSpeedEachEpisode;
 
-        SetResetParameters();
-    }
+        //The direction an agent will walk during training.
+        private Vector3 m_WorldDirToWalk = Vector3.right;
 
-    /// <summary>
-    /// Add relevant information on each body part to observations.
-    /// </summary>
-    public void CollectObservationBodyPart(BodyPart bp, VectorSensor sensor)
-    {
-        //GROUND CHECK
-        sensor.AddObservation(bp.groundContact.touchingGround); // Is this bp touching the ground
+        [Header("Body Parts")]
+        public Transform hips;
+        public Transform spine;
+        public Transform head;
+        public Transform thighL;
+        public Transform shinL;
+        public Transform footL;
+        public Transform thighR;
+        public Transform shinR;
+        public Transform footR;
+        public Transform armL;
+        public Transform forearmL;
+        public Transform handL;
+        public Transform armR;
+        public Transform forearmR;
+        public Transform handR;
 
-        //Get velocities in the context of our orientation cube's space
-        //Note: You can get these velocities in world space as well but it may not train as well.
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.velocity));
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.angularVelocity));
+        //This will be used as a stabilized model space reference point for observations
+        //Because ragdolls can move erratically during training, using a stabilized reference transform improves learning
+        OrientationCubeController m_OrientationCube;
 
-        //Get position relative to hips in the context of our orientation cube's space
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.position - hips.position));
+        //The indicator graphic gameobject that points towards the target
+        JointDriveController m_JdController;
+        EnvironmentParameters m_ResetParams;
 
-        if (bp.rb.transform != hips && bp.rb.transform != handL && bp.rb.transform != handR)
+        DecisionRequester decisionRequester;
+
+        public override void Initialize()
         {
-            sensor.AddObservation(bp.rb.transform.localRotation);
-            sensor.AddObservation(bp.currentStrength / m_JdController.maxJointForceLimit);
-        }
-    }
+            m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
+            decisionRequester = GetComponentInChildren<DecisionRequester>();
 
-    /// <summary>
-    /// Loop over body parts to add them to observation.
-    /// </summary>
-    public override void CollectObservations(VectorSensor sensor)
-    {
-        Debug.Log("CollectObservations: " + System.DateTime.Now.ToLongTimeString());
-        var cubeForward = m_OrientationCube.transform.forward;
+            //Setup each body part
+            m_JdController = GetComponent<JointDriveController>();
+            m_JdController.SetupBodyPart(hips);
+            m_JdController.SetupBodyPart(spine);
+            m_JdController.SetupBodyPart(head);
+            m_JdController.SetupBodyPart(thighL);
+            m_JdController.SetupBodyPart(shinL);
+            m_JdController.SetupBodyPart(footL);
+            m_JdController.SetupBodyPart(thighR);
+            m_JdController.SetupBodyPart(shinR);
+            m_JdController.SetupBodyPart(footR);
+            m_JdController.SetupBodyPart(armL);
+            m_JdController.SetupBodyPart(forearmL);
+            m_JdController.SetupBodyPart(handL);
+            m_JdController.SetupBodyPart(armR);
+            m_JdController.SetupBodyPart(forearmR);
+            m_JdController.SetupBodyPart(handR);
 
-        //velocity we want to match
-        var velGoal = cubeForward * MTargetWalkingSpeed;
-        //ragdoll's avg vel
-        var avgVel = GetAvgVelocity();
+            m_ResetParams = Academy.Instance.EnvironmentParameters;
 
-        //current ragdoll velocity. normalized
-        sensor.AddObservation(Vector3.Distance(velGoal, avgVel));
-        //avg body vel relative to cube
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(avgVel));
-        //vel goal relative to cube
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(velGoal));
-
-        //rotation deltas
-        sensor.AddObservation(Quaternion.FromToRotation(-hips.right, cubeForward));
-        sensor.AddObservation(Quaternion.FromToRotation(-head.up, cubeForward));
-
-        //Position of target position relative to cube
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformPoint(target.transform.position));
-
-        foreach (var bodyPart in m_JdController.bodyPartsList)
-        {
-            CollectObservationBodyPart(bodyPart, sensor);
-        }
-    }
-
-    public override void OnActionReceived(ActionBuffers actionBuffers)
-    {
-        var bpDict = m_JdController.bodyPartsDict;
-        var i = -1;
-
-        var continuousActions = actionBuffers.ContinuousActions;
-        bpDict[spine].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-
-        bpDict[thighL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[thighR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[shinL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[shinR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[footR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[footL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-
-        bpDict[armL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[armR].SetJointTargetRotation(continuousActions[++i], 0f, 0);
-        bpDict[forearmL].SetJointTargetRotation(continuousActions[++i], 0, 0);
-        bpDict[forearmR].SetJointTargetRotation(continuousActions[++i], 0, 0);
-        bpDict[head].SetJointTargetRotation(continuousActions[++i], 0f, 0);
-
-        //update joint strength settings
-        bpDict[spine].SetJointStrength(continuousActions[++i]);
-        bpDict[head].SetJointStrength(continuousActions[++i]);
-        bpDict[thighL].SetJointStrength(continuousActions[++i]);
-        bpDict[shinL].SetJointStrength(continuousActions[++i]);
-        bpDict[footL].SetJointStrength(continuousActions[++i]);
-        bpDict[thighR].SetJointStrength(continuousActions[++i]);
-        bpDict[shinR].SetJointStrength(continuousActions[++i]);
-        bpDict[footR].SetJointStrength(continuousActions[++i]);
-        bpDict[armL].SetJointStrength(continuousActions[++i]);
-        bpDict[forearmL].SetJointStrength(continuousActions[++i]);
-        bpDict[armR].SetJointStrength(continuousActions[++i]);
-        bpDict[forearmR].SetJointStrength(continuousActions[++i]);
-    }
-
-    //Update OrientationCube and DirectionIndicator
-    void UpdateOrientationObjects()
-    {
-        m_WorldDirToWalk = target.position - hips.position;
-        m_OrientationCube.UpdateOrientation(hips, target);
-        if (m_DirectionIndicator)
-        {
-            m_DirectionIndicator.MatchOrientation(m_OrientationCube.transform);
-        }
-    }
-
-    void FixedUpdate()
-    {
-        Debug.Log("FixedUpdate: " + System.DateTime.Now.ToLongTimeString());
-        UpdateOrientationObjects();
-
-        var cubeForward = m_OrientationCube.transform.forward;
-
-        // Set reward for this step according to mixture of the following elements.
-        // a. Match target speed
-        //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-        var matchSpeedReward = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocity());
-
-        //Check for NaNs
-        if (float.IsNaN(matchSpeedReward))
-        {
-            throw new ArgumentException(
-                "NaN in moveTowardsTargetReward.\n" +
-                $" cubeForward: {cubeForward}\n" +
-                $" hips.velocity: {m_JdController.bodyPartsDict[hips].rb.velocity}\n" +
-                $" maximumWalkingSpeed: {m_maxWalkingSpeed}"
-            );
+            SetResetParameters();
         }
 
-        // b. Rotation alignment with target direction.
-        //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
-        var lookAtTargetReward = (Vector3.Dot(cubeForward, -head.up) + 1) * .5F;
-
-        //Check for NaNs
-        if (float.IsNaN(lookAtTargetReward))
+        /// <summary>
+        /// Loop over body parts and reset them to initial conditions.
+        /// </summary>
+        public override void OnEpisodeBegin()
         {
-            throw new ArgumentException(
-                "NaN in lookAtTargetReward.\n" +
-                $" cubeForward: {cubeForward}\n" +
-                $" head.forward: {head.forward}"
-            );
+            //Reset all of the body parts
+            foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
+            {
+                bodyPart.Reset(bodyPart);
+            }
+
+            UpdateOrientationObjects();
+
+            //Set our goal walking speed
+            MTargetWalkingSpeed =
+                randomizeWalkSpeedEachEpisode ? Random.Range(0.1f, m_maxWalkingSpeed) : MTargetWalkingSpeed;
+
+            SetResetParameters();
+
+            ReferenceStateInitialization();
+        }
+        void ReferenceStateInitialization()
+        {
+            animatorReferencer.ReferenceStateInitializationForRef();
+            float deltaTime = Time.fixedDeltaTime * decisionRequester.DecisionPeriod;
+            animatorReferencer.ForwardAnimatior(deltaTime);
+
+            foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
+            {
+                var refBp = animatorReferencer.bodyReferencersDict[bodyPart.rb.name];
+                bodyPart.rb.rotation = refBp.bodyLastQuaternion;
+                bodyPart.rb.angularVelocity = CommonFunctions.CalculateAngularVelocity(refBp.bodyLastQuaternion, refBp.bodyTransform.rotation, deltaTime);
+            }
         }
 
-        AddReward(matchSpeedReward * lookAtTargetReward);
-    }
-
-    //Returns the average velocity of all of the body parts
-    //Using the velocity of the hips only has shown to result in more erratic movement from the limbs, so...
-    //...using the average helps prevent this erratic movement
-    Vector3 GetAvgVelocity()
-    {
-        Vector3 velSum = Vector3.zero;
-
-        //ALL RBS
-        int numOfRb = 0;
-        foreach (var item in m_JdController.bodyPartsList)
+        /// <summary>
+        /// Add relevant information on each body part to observations.
+        /// </summary>
+        public void CollectObservationBodyPart(BodyPart bp, VectorSensor sensor)
         {
-            numOfRb++;
-            velSum += item.rb.velocity;
+            // Reference motion
+            var refBp = animatorReferencer.bodyReferencersDict[bp.rb.name];
+            sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(CommonFunctions.CalculateAngularVelocity(refBp.bodyLastQuaternion, refBp.bodyTransform.rotation, Time.fixedDeltaTime * decisionRequester.DecisionPeriod)));
+            sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(refBp.bodyTransform.rotation, m_OrientationCube.transform.rotation));
+
+            //Ground Check
+            sensor.AddObservation(bp.groundContact.touchingGround); // Is this bp touching the ground
+
+            //Get velocities in the context of our orientation cube's space
+            //Note: You can get these velocities in world space as well but it may not train as well.
+            sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.velocity));
+            sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.angularVelocity));
+
+            //Get position relative to hips in the context of our orientation cube's space
+            sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.position - hips.position));
+
+            sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(bp.rb.rotation, m_OrientationCube.transform.rotation));
+            if (bp.joint != null)
+                sensor.AddObservation(bp.currentStrength / m_JdController.maxJointForceLimit);
         }
 
-        var avgVel = velSum / numOfRb;
-        return avgVel;
-    }
+        /// <summary>
+        /// Loop over body parts to add them to observation.
+        /// </summary>
+        public override void CollectObservations(VectorSensor sensor)
+        {
+            var cubeForward = m_OrientationCube.transform.forward;
 
-    //normalized value of the difference in avg speed vs goal walking speed.
-    public float GetMatchingVelocityReward(Vector3 velocityGoal, Vector3 actualVelocity)
-    {
-        //distance between our actual velocity and goal velocity
-        var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(actualVelocity, velocityGoal), 0, MTargetWalkingSpeed);
+            //velocity we want to match
+            Vector2 velGoal = cubeForward * MTargetWalkingSpeed;
+            //ragdoll's avg vel
+            Vector2 avgVel = GetAvgVelocity();
 
-        //return the value on a declining sigmoid shaped curve that decays from 1 to 0
-        //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-        return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
-    }
+            //current ragdoll velocity. normalized
+            sensor.AddObservation(Vector2.Distance(velGoal, avgVel));
+            //avg body vel relative to cube
+            Vector2 avgVelLocal = m_OrientationCube.transform.InverseTransformDirection(avgVel);
+            sensor.AddObservation(avgVelLocal);
+            //vel goal relative to cube
+            Vector2 velGoalLocal = m_OrientationCube.transform.InverseTransformDirection(velGoal);
+            sensor.AddObservation(velGoalLocal);
 
-    /// <summary>
-    /// Agent touched the target
-    /// </summary>
-    public void TouchedTarget()
-    {
-        AddReward(1f);
-        EndEpisode();
-    }
+            //rotation deltas
+            sensor.AddObservation(Quaternion.FromToRotation(-hips.right, cubeForward));
+            sensor.AddObservation(Quaternion.FromToRotation(-head.up, cubeForward));
 
-    public void SetTorsoMass()
-    {
-        m_JdController.bodyPartsDict[spine].rb.mass = m_ResetParams.GetWithDefault("spine_mass", 8);
-        m_JdController.bodyPartsDict[hips].rb.mass = m_ResetParams.GetWithDefault("hip_mass", 8);
-    }
+            foreach (var bodyPart in m_JdController.bodyPartsList)
+                CollectObservationBodyPart(bodyPart, sensor);
 
-    public void SetResetParameters()
-    {
-        SetTorsoMass();
+            animatorReferencer.RecordAllBodiesLastLocalQuaternion();
+        }
+
+        public override void OnActionReceived(ActionBuffers actionBuffers)
+        {
+            var bpDict = m_JdController.bodyPartsDict;
+            var i = -1;
+
+            var continuousActions = actionBuffers.ContinuousActions;
+            bpDict[spine].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+
+            bpDict[thighL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[thighR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[shinL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[shinR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[footR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[footL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+
+            bpDict[armL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[armR].SetJointTargetRotation(continuousActions[++i], 0f, 0);
+            bpDict[forearmL].SetJointTargetRotation(continuousActions[++i], 0, 0);
+            bpDict[forearmR].SetJointTargetRotation(continuousActions[++i], 0, 0);
+            bpDict[head].SetJointTargetRotation(continuousActions[++i], 0f, 0);
+
+            //update joint strength settings
+            bpDict[spine].SetJointStrength(continuousActions[++i]);
+            bpDict[head].SetJointStrength(continuousActions[++i]);
+            bpDict[thighL].SetJointStrength(continuousActions[++i]);
+            bpDict[shinL].SetJointStrength(continuousActions[++i]);
+            bpDict[footL].SetJointStrength(continuousActions[++i]);
+            bpDict[thighR].SetJointStrength(continuousActions[++i]);
+            bpDict[shinR].SetJointStrength(continuousActions[++i]);
+            bpDict[footR].SetJointStrength(continuousActions[++i]);
+            bpDict[armL].SetJointStrength(continuousActions[++i]);
+            bpDict[forearmL].SetJointStrength(continuousActions[++i]);
+            bpDict[armR].SetJointStrength(continuousActions[++i]);
+            bpDict[forearmR].SetJointStrength(continuousActions[++i]);
+        }
+
+        //Update OrientationCube and DirectionIndicator
+        void UpdateOrientationObjects()
+        {
+            m_OrientationCube.transform.position = hips.position;
+        }
+
+        void FixedUpdate()
+        {
+            UpdateOrientationObjects();
+
+            var cubeForward = m_OrientationCube.transform.forward;
+
+            // Set reward for this step according to mixture of the following elements.
+            // a. Match target speed
+            //This reward will approach 1 if it matches perfectly and approach zero as it deviates
+            var matchSpeedReward = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocity());
+
+            //Check for NaNs
+            if (float.IsNaN(matchSpeedReward))
+            {
+                throw new ArgumentException(
+                    "NaN in moveTowardsTargetReward.\n" +
+                    $" cubeForward: {cubeForward}\n" +
+                    $" hips.velocity: {m_JdController.bodyPartsDict[hips].rb.velocity}\n" +
+                    $" maximumWalkingSpeed: {m_maxWalkingSpeed}"
+                );
+            }
+
+            // b. Rotation alignment with target direction.
+            //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
+            var lookAtTargetReward = (Vector3.Dot(cubeForward, -head.up) + 1) * .5F;
+
+            //Check for NaNs
+            if (float.IsNaN(lookAtTargetReward))
+            {
+                throw new ArgumentException(
+                    "NaN in lookAtTargetReward.\n" +
+                    $" cubeForward: {cubeForward}\n" +
+                    $" head.forward: {head.forward}"
+                );
+            }
+
+            AddReward(matchSpeedReward * lookAtTargetReward);
+        }
+
+        //Returns the average velocity of all of the body parts
+        //Using the velocity of the hips only has shown to result in more erratic movement from the limbs, so...
+        //...using the average helps prevent this erratic movement
+        Vector2 GetAvgVelocity()
+        {
+            Vector2 velSum = Vector2.zero;
+
+            //ALL RBS
+            int numOfRb = 0;
+            foreach (var item in m_JdController.bodyPartsList)
+            {
+                numOfRb++;
+                velSum.x += item.rb.velocity.x;
+                velSum.y += item.rb.velocity.y;
+            }
+
+            var avgVel = velSum / numOfRb;
+            return avgVel;
+        }
+
+        //normalized value of the difference in avg speed vs goal walking speed.
+        public float GetMatchingVelocityReward(Vector3 velocityGoal, Vector3 actualVelocity)
+        {
+            //distance between our actual velocity and goal velocity
+            var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(actualVelocity, velocityGoal), 0, MTargetWalkingSpeed);
+
+            //return the value on a declining sigmoid shaped curve that decays from 1 to 0
+            //This reward will approach 1 if it matches perfectly and approach zero as it deviates
+            return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
+        }
+
+        /// <summary>
+        /// Agent touched the target
+        /// </summary>
+        public void TouchedTarget()
+        {
+            AddReward(1f);
+            EndEpisode();
+        }
+
+        public void SetTorsoMass()
+        {
+            m_JdController.bodyPartsDict[spine].rb.mass = m_ResetParams.GetWithDefault("spine_mass", 8);
+            m_JdController.bodyPartsDict[hips].rb.mass = m_ResetParams.GetWithDefault("hip_mass", 8);
+        }
+
+        public void SetResetParameters()
+        {
+            SetTorsoMass();
+        }
     }
 }

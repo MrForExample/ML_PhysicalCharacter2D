@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.MLAgents;
 
 public class AnimatorReferencer : MonoBehaviour
 {
     Animator animator;
-    public DecisionRequester decisionRequester;
     public float maxAnimationLength = 1f;
 
     [Header("Body Parts")]
@@ -31,14 +29,14 @@ public class AnimatorReferencer : MonoBehaviour
     public class BodyReferencer
     {
         public Transform bodyTransform;
-        public Quaternion bodyLastLocalQuaternion;
+        public Quaternion bodyLastQuaternion;
         public BodyReferencer(Transform newBodyTransform)
         {
             bodyTransform = newBodyTransform;
         }
         public void recordLastLocalQuaternion()
         {
-            bodyLastLocalQuaternion = bodyTransform.localRotation;
+            bodyLastQuaternion = bodyTransform.rotation;
         }
     }
     // Start is called before the first frame update
@@ -61,36 +59,20 @@ public class AnimatorReferencer : MonoBehaviour
         bodyReferencersDict.Add(armR.name, new BodyReferencer(armR));
         bodyReferencersDict.Add(forearmR.name, new BodyReferencer(forearmR));
         bodyReferencersDict.Add(handR.name, new BodyReferencer(handR));
-
-        ReferenceStateInitialization();
     }
 
-    void ReferenceStateInitialization()
+    public void ReferenceStateInitializationForRef()
     {
         animator.Update(Random.Range(0f, maxAnimationLength));
         RecordAllBodiesLastLocalQuaternion();
-        animator.Update(Time.fixedDeltaTime * decisionRequester.DecisionPeriod);
     }
     public void RecordAllBodiesLastLocalQuaternion()
     {
         foreach (var bodyPart in bodyReferencersDict.Values)
             bodyPart.recordLastLocalQuaternion();
     }
-    public Quaternion CalculateQuaternionDifference(Quaternion previousRotation, Quaternion currentRotation)
+    public void ForwardAnimatior(float deltaTime)
     {
-        return currentRotation * Quaternion.Inverse(previousRotation);
-    }
-    public Vector3 CalculateAngularVelocity(Quaternion previousRotation, Quaternion currentRotation, float deltaTime)
-    {
-        Quaternion deltaRotation = CalculateQuaternionDifference(previousRotation, currentRotation);
-        
-        float angle  = 0.0f;
-        Vector3 axis = Vector3.zero;
-        
-        deltaRotation.ToAngleAxis(out angle, out axis);
-        
-        angle *= Mathf.Deg2Rad;
-        
-        return axis * angle * (1.0f / deltaTime);
+        animator.Update(deltaTime);
     }
 }
