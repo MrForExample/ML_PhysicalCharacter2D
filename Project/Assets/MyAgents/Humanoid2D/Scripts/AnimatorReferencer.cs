@@ -24,23 +24,32 @@ public class AnimatorReferencer : MonoBehaviour
     public Transform forearmR;
     public Transform handR;
 
+    Transform[] endEffectors;
+    [HideInInspector]
+    public Vector3[] endEffectorPos; 
+
     [HideInInspector] public Dictionary<string, BodyReferencer> bodyReferencersDict = new Dictionary<string, BodyReferencer>();
 
     public class BodyReferencer
     {
         public Transform bodyTransform;
         public Quaternion bodyLastQuaternion;
+        public Quaternion bodyLastLocalQuaternion;
+        public Vector3 bodyLastCOM;
+        public Vector3 bodyCOMLocalOffset;
         public BodyReferencer(Transform newBodyTransform)
         {
             bodyTransform = newBodyTransform;
         }
-        public void recordLastLocalQuaternion()
+        public void recordLastTarget()
         {
             bodyLastQuaternion = bodyTransform.rotation;
+            bodyLastLocalQuaternion = bodyTransform.localRotation;
+            bodyLastCOM = bodyTransform.position + bodyTransform.TransformVector(bodyCOMLocalOffset);
         }
     }
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         animator = GetComponent<Animator>();
 
@@ -59,17 +68,25 @@ public class AnimatorReferencer : MonoBehaviour
         bodyReferencersDict.Add(armR.name, new BodyReferencer(armR));
         bodyReferencersDict.Add(forearmR.name, new BodyReferencer(forearmR));
         bodyReferencersDict.Add(handR.name, new BodyReferencer(handR));
+
+        endEffectors = new Transform[4]{handL, handR, footL, footR};
     }
 
     public void ReferenceStateInitializationForRef()
     {
         animator.Update(Random.Range(0f, maxAnimationLength));
-        RecordAllBodiesLastLocalQuaternion();
+        RecordAllBodiesLastTarget();
     }
-    public void RecordAllBodiesLastLocalQuaternion()
+    public void RecordAllBodiesLastTarget()
     {
         foreach (var bodyPart in bodyReferencersDict.Values)
-            bodyPart.recordLastLocalQuaternion();
+            bodyPart.recordLastTarget();
+        RecordAllLastEndEffectorPosition();
+    }
+    public void RecordAllLastEndEffectorPosition()
+    {
+        for (int i = 0; i < endEffectors.Length; i++)
+            endEffectorPos[i] = endEffectors[i].position - hips.position;
     }
     public void ForwardAnimatior(float deltaTime)
     {

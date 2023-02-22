@@ -56,12 +56,13 @@ namespace PhysicalCharacter2D
         //This will be used as a stabilized model space reference point for observations
         //Because ragdolls can move erratically during training, using a stabilized reference transform improves learning
         OrientationCubeController m_OrientationCube;
-
-        //The indicator graphic gameobject that points towards the target
         JointDriveController m_JdController;
         EnvironmentParameters m_ResetParams;
 
         DecisionRequester decisionRequester;
+
+        BodyPart[] endEffectors;
+        float totalMass;
 
         public override void Initialize()
         {
@@ -89,6 +90,19 @@ namespace PhysicalCharacter2D
             m_ResetParams = Academy.Instance.EnvironmentParameters;
 
             SetResetParameters();
+
+            endEffectors = new BodyPart[4]{m_JdController.bodyPartsDict[handL], 
+                                        m_JdController.bodyPartsDict[handR], 
+                                        m_JdController.bodyPartsDict[footL], 
+                                        m_JdController.bodyPartsDict[footR]};
+
+            totalMass = 0f;
+            foreach (var bp in m_JdController.bodyPartsDict.Values)
+            {
+                totalMass += bp.rb.mass;
+                var refBp = animatorReferencer.bodyReferencersDict[bp.rb.name];
+                refBp.bodyCOMLocalOffset = refBp.bodyTransform.InverseTransformVector(bp.rb.worldCenterOfMass - bp.rb.transform.position);
+            }
         }
 
         /// <summary>
@@ -97,9 +111,9 @@ namespace PhysicalCharacter2D
         public override void OnEpisodeBegin()
         {
             //Reset all of the body parts
-            foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
+            foreach (var bp in m_JdController.bodyPartsDict.Values)
             {
-                bodyPart.Reset(bodyPart);
+                bp.Reset(bp);
             }
 
             UpdateOrientationObjects();
@@ -115,14 +129,15 @@ namespace PhysicalCharacter2D
         void ReferenceStateInitialization()
         {
             animatorReferencer.ReferenceStateInitializationForRef();
-            float deltaTime = Time.fixedDeltaTime * decisionRequester.DecisionPeriod;
+            float deltaTime = Time.fixedDeltaTime;
             animatorReferencer.ForwardAnimatior(deltaTime);
 
-            foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
+            foreach (var bp in m_JdController.bodyPartsDict.Values)
             {
-                var refBp = animatorReferencer.bodyReferencersDict[bodyPart.rb.name];
-                bodyPart.rb.rotation = refBp.bodyLastQuaternion;
-                bodyPart.rb.angularVelocity = CommonFunctions.CalculateAngularVelocity(refBp.bodyLastQuaternion, refBp.bodyTransform.rotation, deltaTime);
+                var refBp = animatorReferencer.bodyReferencersDict[bp.rb.name];
+                bp.rb.rotation = refBp.bodyLastQuaternion;
+                bp.rb.transform.localRotation = refBp.bodyLastLocalQuaternion;
+                bp.rb.angularVelocity = CommonFunctions.CalculateAngularVelocity(refBp.bodyLastQuaternion, refBp.bodyTransform.rotation, deltaTime);
             }
         }
 
@@ -134,7 +149,7 @@ namespace PhysicalCharacter2D
             // Reference motion
             var refBp = animatorReferencer.bodyReferencersDict[bp.rb.name];
             sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(CommonFunctions.CalculateAngularVelocity(refBp.bodyLastQuaternion, refBp.bodyTransform.rotation, Time.fixedDeltaTime * decisionRequester.DecisionPeriod)));
-            sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(refBp.bodyTransform.rotation, m_OrientationCube.transform.rotation));
+            sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(refBp.bodyLastQuaternion, m_OrientationCube.transform.rotation));
 
             //Ground Check
             sensor.AddObservation(bp.groundContact.touchingGround); // Is this bp touching the ground
@@ -144,12 +159,21 @@ namespace PhysicalCharacter2D
             sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.velocity));
             sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.angularVelocity));
 
-            //Get position relative to hips in the context of our orientation cube's space
-            sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.position - hips.position));
+            //sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(bp.rb.rotation, m_OrientationCube.transform.rotation));
+            sensor.AddObservation(bp.rb.transform.localRotation);
 
-            sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(bp.rb.rotation, m_OrientationCube.transform.rotation));
-            if (bp.joint != null)
+            if (bp.rb.transform != hips)
+            {
+                //Get position relative to hips in the context of our orientation cube's space
+                sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.position - hips.position));
                 sensor.AddObservation(bp.currentStrength / m_JdController.maxJointForceLimit);
+            }
+            else
+            {
+                // Add root height for both reference and simulated agent 
+                sensor.AddObservation(refBp.bodyTransform.position.y);
+                sensor.AddObservation(hips.position.y);
+            }
         }
 
         /// <summary>
@@ -179,8 +203,6 @@ namespace PhysicalCharacter2D
 
             foreach (var bodyPart in m_JdController.bodyPartsList)
                 CollectObservationBodyPart(bodyPart, sensor);
-
-            animatorReferencer.RecordAllBodiesLastLocalQuaternion();
         }
 
         public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -219,16 +241,77 @@ namespace PhysicalCharacter2D
             bpDict[forearmR].SetJointStrength(continuousActions[++i]);
         }
 
-        //Update OrientationCube and DirectionIndicator
+        //Update OrientationCube
         void UpdateOrientationObjects()
         {
             m_OrientationCube.transform.position = hips.position;
         }
 
+        float wi = 0.7f, wg = 0.3f;
         void FixedUpdate()
         {
             UpdateOrientationObjects();
 
+            float ri = CalculateImitationReward();
+            float rg = CalculateTaskReward();
+            AddReward(wi * ri + wg * rg);
+
+            animatorReferencer.RecordAllBodiesLastTarget();
+        }
+        float wp = 0.65f, wv = 0.1f, we = 0.15f, wc = 0.1f;
+        float wps = -2f, wvs = -0.1f, wes = -40f, wcs = -10f;
+        float CalculateImitationReward()
+        {
+            float rotDiffSum = 0f, angularVelDiffSum = 0f, endDiffSum = 0f, cOMDiffSum = 0f;
+
+            Vector3 hipPos = m_JdController.bodyPartsDict[hips].rb.position;
+            for (int i = 0; i < endEffectors.Length; i++)
+            {
+                endDiffSum += Vector3.SqrMagnitude(animatorReferencer.endEffectorPos[i] - (endEffectors[i].rb.position - hipPos));
+            }
+
+            float angle  = 0.0f;
+            Vector3 axis = Vector3.zero,
+                    worldCOM = new Vector3(0f, m_JdController.bodyPartsDict[hips].rb.worldCenterOfMass.y), 
+                    targetWorldCOM = new Vector3(0f, animatorReferencer.bodyReferencersDict[hips.name].bodyLastCOM.y);
+            foreach (var bp in m_JdController.bodyPartsDict.Values)
+            {
+                var refBp = animatorReferencer.bodyReferencersDict[bp.rb.name];
+
+                Quaternion deltaRotation = CommonFunctions.CalculateLocalQuaternion(bp.rb.transform.localRotation, refBp.bodyLastLocalQuaternion);
+                deltaRotation.ToAngleAxis(out angle, out axis);
+                rotDiffSum += Mathf.Pow(angle * Mathf.Deg2Rad, 2f);
+
+                Vector3 targetAngularVel = CommonFunctions.CalculateAngularVelocity(refBp.bodyLastQuaternion, refBp.bodyTransform.rotation, Time.fixedDeltaTime);
+                angularVelDiffSum += Vector3.SqrMagnitude(targetAngularVel - bp.rb.angularVelocity);
+
+                worldCOM += (bp.rb.worldCenterOfMass - m_JdController.bodyPartsDict[hips].rb.worldCenterOfMass) * bp.rb.mass;
+                targetWorldCOM += refBp.bodyLastCOM * bp.rb.mass;
+            }
+            worldCOM /= totalMass;
+            targetWorldCOM /= totalMass;
+            cOMDiffSum = Vector3.SqrMagnitude(targetWorldCOM - worldCOM);
+            
+            float rp = wp * Mathf.Exp(wps * rotDiffSum);
+            float rv = wv * Mathf.Exp(wvs * angularVelDiffSum);
+            float re = we * Mathf.Exp(wes * endDiffSum);
+            float rc = wc * Mathf.Exp(wcs * cOMDiffSum);
+
+            float ri = rp + rv + re + rc;
+            //Check for NaNs
+            if (float.IsNaN(ri))
+            {
+                throw new ArgumentException(
+                    "NaN in imitation reward.\n" +
+                    $" rp: {rp};" + $" rv: {rv};" + $" re: {re};" + $" rc: {rc};" 
+                );
+            }
+
+            return ri;
+        }
+
+        float CalculateTaskReward()
+        {
             var cubeForward = m_OrientationCube.transform.forward;
 
             // Set reward for this step according to mixture of the following elements.
@@ -236,32 +319,23 @@ namespace PhysicalCharacter2D
             //This reward will approach 1 if it matches perfectly and approach zero as it deviates
             var matchSpeedReward = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocity());
 
-            //Check for NaNs
-            if (float.IsNaN(matchSpeedReward))
-            {
-                throw new ArgumentException(
-                    "NaN in moveTowardsTargetReward.\n" +
-                    $" cubeForward: {cubeForward}\n" +
-                    $" hips.velocity: {m_JdController.bodyPartsDict[hips].rb.velocity}\n" +
-                    $" maximumWalkingSpeed: {m_maxWalkingSpeed}"
-                );
-            }
-
             // b. Rotation alignment with target direction.
             //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
             var lookAtTargetReward = (Vector3.Dot(cubeForward, -head.up) + 1) * .5F;
 
+            float rg = matchSpeedReward * lookAtTargetReward;
             //Check for NaNs
-            if (float.IsNaN(lookAtTargetReward))
+            if (float.IsNaN(rg))
             {
                 throw new ArgumentException(
-                    "NaN in lookAtTargetReward.\n" +
-                    $" cubeForward: {cubeForward}\n" +
-                    $" head.forward: {head.forward}"
+                    "NaN in task reward.\n" +
+                    $" cubeForward: {cubeForward}\n" + 
+                    $" head.forward: {head.forward}\n" + 
+                    $" maximumWalkingSpeed: {m_maxWalkingSpeed}\n" +
+                    $" hips.velocity: {m_JdController.bodyPartsDict[hips].rb.velocity}"
                 );
             }
-
-            AddReward(matchSpeedReward * lookAtTargetReward);
+            return rg;
         }
 
         //Returns the average velocity of all of the body parts
