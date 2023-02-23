@@ -56,12 +56,14 @@ namespace PhysicalCharacter2D
         //This will be used as a stabilized model space reference point for observations
         //Because ragdolls can move erratically during training, using a stabilized reference transform improves learning
         OrientationCubeController m_OrientationCube;
-        JointDriveController m_JdController;
+        [HideInInspector]
+        public JointDriveController m_JdController;
         EnvironmentParameters m_ResetParams;
 
         DecisionRequester decisionRequester;
 
-        BodyPart[] endEffectors;
+        [HideInInspector]
+        public BodyPart[] endEffectors;
         float totalMass;
 
         public override void Initialize()
@@ -98,11 +100,7 @@ namespace PhysicalCharacter2D
 
             totalMass = 0f;
             foreach (var bp in m_JdController.bodyPartsDict.Values)
-            {
                 totalMass += bp.rb.mass;
-                var refBp = animatorReferencer.bodyReferencersDict[bp.rb.name];
-                refBp.bodyCOMLocalOffset = refBp.bodyTransform.InverseTransformVector(bp.rb.worldCenterOfMass - bp.rb.transform.position);
-            }
         }
 
         /// <summary>
@@ -161,18 +159,21 @@ namespace PhysicalCharacter2D
 
             //sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(bp.rb.rotation, m_OrientationCube.transform.rotation));
             sensor.AddObservation(bp.rb.transform.localRotation);
+            // state size: 18
 
             if (bp.rb.transform != hips)
             {
                 //Get position relative to hips in the context of our orientation cube's space
                 sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.position - hips.position));
                 sensor.AddObservation(bp.currentStrength / m_JdController.maxJointForceLimit);
+                // state size: 22
             }
             else
             {
                 // Add root height for both reference and simulated agent 
                 sensor.AddObservation(refBp.bodyTransform.position.y);
                 sensor.AddObservation(hips.position.y);
+                // state size: 20
             }
         }
 
@@ -200,9 +201,11 @@ namespace PhysicalCharacter2D
             //rotation deltas
             sensor.AddObservation(Quaternion.FromToRotation(-hips.right, cubeForward));
             sensor.AddObservation(Quaternion.FromToRotation(-head.up, cubeForward));
+            // state size: 13 
 
             foreach (var bodyPart in m_JdController.bodyPartsList)
                 CollectObservationBodyPart(bodyPart, sensor);
+            // state size: 13 + 328
         }
 
         public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -259,7 +262,8 @@ namespace PhysicalCharacter2D
             animatorReferencer.RecordAllBodiesLastTarget();
         }
         float wp = 0.65f, wv = 0.1f, we = 0.15f, wc = 0.1f;
-        float wps = -2f, wvs = -0.1f, wes = -40f, wcs = -10f;
+        //float wps = -2f, wvs = -0.1f, wes = -40f, wcs = -10f;
+        float wps = -2f, wvs = -40f, wes = -40f, wcs = -10f;
         float CalculateImitationReward()
         {
             float rotDiffSum = 0f, angularVelDiffSum = 0f, endDiffSum = 0f, cOMDiffSum = 0f;
@@ -286,11 +290,9 @@ namespace PhysicalCharacter2D
                 angularVelDiffSum += Vector3.SqrMagnitude(targetAngularVel - bp.rb.angularVelocity);
 
                 worldCOM += (bp.rb.worldCenterOfMass - m_JdController.bodyPartsDict[hips].rb.worldCenterOfMass) * bp.rb.mass;
-                targetWorldCOM += refBp.bodyLastCOM * bp.rb.mass;
+                targetWorldCOM += (refBp.bodyLastCOM - animatorReferencer.hips.bodyLastCOM) * bp.rb.mass;
             }
-            worldCOM /= totalMass;
-            targetWorldCOM /= totalMass;
-            cOMDiffSum = Vector3.SqrMagnitude(targetWorldCOM - worldCOM);
+            cOMDiffSum = Vector3.SqrMagnitude((targetWorldCOM - worldCOM) / totalMass);
             
             float rp = wp * Mathf.Exp(wps * rotDiffSum);
             float rv = wv * Mathf.Exp(wvs * angularVelDiffSum);
