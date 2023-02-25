@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
@@ -53,6 +54,9 @@ namespace PhysicalCharacter2D
         public Transform forearmR;
         public Transform handR;
 
+        [HideInInspector]
+        public GroundContact[] footsLand;
+
         //This will be used as a stabilized model space reference point for observations
         //Because ragdolls can move erratically during training, using a stabilized reference transform improves learning
         OrientationCubeController m_OrientationCube;
@@ -88,6 +92,10 @@ namespace PhysicalCharacter2D
             m_JdController.SetupBodyPart(armR);
             m_JdController.SetupBodyPart(forearmR);
             m_JdController.SetupBodyPart(handR);
+
+            footsLand = new GroundContact[2];
+            footsLand[0] = footL.GetComponentInChildren<GroundContact>(true);
+            footsLand[1] = footR.GetComponentInChildren<GroundContact>(true);
 
             m_ResetParams = Academy.Instance.EnvironmentParameters;
 
@@ -261,18 +269,25 @@ namespace PhysicalCharacter2D
 
             animatorReferencer.RecordAllBodiesLastTarget();
         }
-        float wp = 0.65f, wv = 0.1f, we = 0.15f, wc = 0.1f;
+        float wp = 0.65f, wv = 0.1f, we = 0.15f, wc = 0.1f, wl = 0.15f;
         //float wps = -2f, wvs = -0.1f, wes = -40f, wcs = -10f;
-        float wps = -2f, wvs = -40f, wes = -40f, wcs = -10f;
+        float wps = -2f, wvs = -40f, wes = -4f, wcs = -10f, wls = -10f;
         float CalculateImitationReward()
         {
-            float rotDiffSum = 0f, angularVelDiffSum = 0f, endDiffSum = 0f, cOMDiffSum = 0f;
+            float rotDiffSum = 0f, angularVelDiffSum = 0f, endDiffSum = 0f, cOMDiffSum = 0f, footsLandSum = 0f;
 
             Vector3 hipPos = m_JdController.bodyPartsDict[hips].rb.position;
             for (int i = 0; i < endEffectors.Length; i++)
             {
                 endDiffSum += Vector3.SqrMagnitude(animatorReferencer.endEffectorPos[i] - (endEffectors[i].rb.position - hipPos));
             }
+
+            for (int i = 0; i < footsLand.Length; i++)
+            {
+                footsLandSum += footsLand[i].touchingGround == animatorReferencer.footsLand[i].touchingGround? 1f : 0f;
+                //Debug.Log("foot " + i + ": " + animatorReferencer.footsLand[i].touchingGround);
+            }
+            footsLandSum /= footsLand.Length;
 
             float angle  = 0.0f;
             Vector3 axis = Vector3.zero,
@@ -298,8 +313,9 @@ namespace PhysicalCharacter2D
             float rv = wv * Mathf.Exp(wvs * angularVelDiffSum);
             float re = we * Mathf.Exp(wes * endDiffSum);
             float rc = wc * Mathf.Exp(wcs * cOMDiffSum);
+            float rl = wl * Mathf.Exp(wls * footsLandSum);
 
-            float ri = rp + rv + re + rc;
+            float ri = rp + rv + re + rc + rl;
             //Check for NaNs
             if (float.IsNaN(ri))
             {
@@ -319,13 +335,8 @@ namespace PhysicalCharacter2D
             // Set reward for this step according to mixture of the following elements.
             // a. Match target speed
             //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-            var matchSpeedReward = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocity());
+            float rg = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocity());
 
-            // b. Rotation alignment with target direction.
-            //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
-            var lookAtTargetReward = (Vector3.Dot(cubeForward, -head.up) + 1) * .5F;
-
-            float rg = matchSpeedReward * lookAtTargetReward;
             //Check for NaNs
             if (float.IsNaN(rg))
             {

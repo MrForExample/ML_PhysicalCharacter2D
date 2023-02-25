@@ -14,7 +14,9 @@ namespace PhysicalCharacter2D
         public BodyReferencer hips;
         BodyReferencer[] endEffectors;
         [HideInInspector]
-        public Vector3[] endEffectorPos; 
+        public Vector3[] endEffectorPos;
+        [HideInInspector]
+        public GroundTrigger[] footsLand;
 
         [HideInInspector] public Dictionary<string, BodyReferencer> bodyReferencersDict = new Dictionary<string, BodyReferencer>();
 
@@ -80,6 +82,10 @@ namespace PhysicalCharacter2D
                     sr.gameObject.SetActive(false);
                 }
             }
+
+            footsLand = new GroundTrigger[2];
+            footsLand[0] = bodyReferencersDict[agent2D.footL.name].bodyTransform.GetComponentInChildren<GroundTrigger>(true);
+            footsLand[1] = bodyReferencersDict[agent2D.footR.name].bodyTransform.GetComponentInChildren<GroundTrigger>(true);
         }
 
         public void ReferenceStateInitializationForRef()

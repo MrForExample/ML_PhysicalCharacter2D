@@ -1026,8 +1026,8 @@ MonoBehaviour:
       mouthPart: {fileID: 0}
       earPart: {fileID: 0}
   emoteAnimIndex: -1
-  initializeAtAwake: 1
-  instanceMaterials: 1
+  initializeAtAwake: 0
+  instanceMaterials: 0
   sprites:
   - {fileID: 5869092443118104510}
   - {fileID: 4370302934574868147}
@@ -1186,6 +1186,7 @@ MonoBehaviour:
   agent2D: {fileID: 8296854384857544112}
   maxAnimationLength: 1.083
   endEffectorPos: []
+  footsLand: []
 --- !u!1 &730586236432771170
 GameObject:
   m_ObjectHideFlags: 0
@@ -2250,7 +2251,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8146846993740372953}
   - component: {fileID: 4529360516137269626}
-  m_Layer: 0
+  - component: {fileID: 6360913279780983903}
+  - component: {fileID: 2823332034851205820}
+  - component: {fileID: 7946595097231077995}
+  m_Layer: 1
   m_Name: Foot L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2325,6 +2329,48 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!54 &6360913279780983903
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179776273986867644}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 56
+  m_CollisionDetection: 0
+--- !u!65 &2823332034851205820
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179776273986867644}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.3862219, y: 0.7942878, z: 0.2}
+  m_Center: {x: -0.011727892, y: -0.0771449, z: 0}
+--- !u!114 &7946595097231077995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179776273986867644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b4710e9e631fb342a764e5d47f51560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  touchingGround: 0
 --- !u!1 &1187323834877730068
 GameObject:
   m_ObjectHideFlags: 0
@@ -2741,11 +2787,11 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -60
+    limit: -45
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 60
+    limit: 45
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
@@ -6117,7 +6163,7 @@ ConfigurableJoint:
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 120
+    limit: 60
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
@@ -8556,7 +8602,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4467583273387008176}
   - component: {fileID: 3332674722620293512}
-  m_Layer: 0
+  - component: {fileID: 7530218756251866470}
+  - component: {fileID: 8128871047557015226}
+  - component: {fileID: 5512132322226583580}
+  m_Layer: 1
   m_Name: Foot R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8631,6 +8680,48 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!54 &7530218756251866470
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3883133380149457144}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 56
+  m_CollisionDetection: 0
+--- !u!65 &8128871047557015226
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3883133380149457144}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.3898386, y: 0.66270095, z: 0.2}
+  m_Center: {x: -0.009919524, y: -0.011351406, z: 0}
+--- !u!114 &5512132322226583580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3883133380149457144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b4710e9e631fb342a764e5d47f51560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  touchingGround: 0
 --- !u!1 &3896352110704145219
 GameObject:
   m_ObjectHideFlags: 0
@@ -8991,18 +9082,18 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -60
+    limit: -35
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 30
+    limit: 15
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 40
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
@@ -9876,11 +9967,11 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -60
+    limit: -35
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 30
+    limit: 15
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
@@ -10977,7 +11068,7 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -120
+    limit: -60
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
@@ -11456,7 +11547,7 @@ ConfigurableJoint:
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 120
+    limit: 60
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
@@ -15056,7 +15147,7 @@ GameObject:
   - component: {fileID: 6902315704443753228}
   - component: {fileID: 6902315704443753227}
   - component: {fileID: 6902315704443753226}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Ground
   m_TagString: ground
   m_Icon: {fileID: 0}
@@ -18271,6 +18362,9 @@ MonoBehaviour:
   armR: {fileID: 2129326219026492723}
   forearmR: {fileID: 1297624623428489392}
   handR: {fileID: 1505027372747461674}
+  footsLand:
+  - {fileID: 0}
+  - {fileID: 0}
   m_JdController: {fileID: 0}
   endEffectors: []
 --- !u!114 &3372648308281435616
@@ -19016,7 +19110,7 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -120
+    limit: -60
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
@@ -19785,11 +19879,11 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -60
+    limit: -45
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 60
+    limit: 45
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:

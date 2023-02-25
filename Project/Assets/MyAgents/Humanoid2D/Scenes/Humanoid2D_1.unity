@@ -1268,6 +1268,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 509312825910451095, guid: dfed3251e7752d64f81b0d1106839cd5,
+        type: 3}
+      propertyPath: disableSpritesRender
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6902315703993018078, guid: dfed3251e7752d64f81b0d1106839cd5,
         type: 3}
       propertyPath: m_Name
