@@ -99,8 +99,6 @@ namespace PhysicalCharacter2D
 
             m_ResetParams = Academy.Instance.EnvironmentParameters;
 
-            SetResetParameters();
-
             endEffectors = new BodyPart[4]{m_JdController.bodyPartsDict[handL], 
                                         m_JdController.bodyPartsDict[handR], 
                                         m_JdController.bodyPartsDict[footL], 
@@ -127,8 +125,6 @@ namespace PhysicalCharacter2D
             //Set our goal walking speed
             MTargetWalkingSpeed =
                 randomizeWalkSpeedEachEpisode ? Random.Range(0.1f, m_maxWalkingSpeed) : MTargetWalkingSpeed;
-
-            SetResetParameters();
 
             ReferenceStateInitialization();
         }
@@ -269,9 +265,9 @@ namespace PhysicalCharacter2D
 
             animatorReferencer.RecordAllBodiesLastTarget();
         }
-        float wp = 0.65f, wv = 0.1f, we = 0.15f, wc = 0.1f, wl = 0.15f;
+        float wp = 0.65f, wv = 0.1f, we = 0.15f, wc = 0.1f, wl = 0.1f;
         //float wps = -2f, wvs = -0.1f, wes = -40f, wcs = -10f;
-        float wps = -2f, wvs = -40f, wes = -4f, wcs = -10f, wls = -10f;
+        float wps = -2f, wvs = -4f, wes = -4f, wcs = -10f, wls = -10f;
         float CalculateImitationReward()
         {
             float rotDiffSum = 0f, angularVelDiffSum = 0f, endDiffSum = 0f, cOMDiffSum = 0f, footsLandSum = 0f;
@@ -284,7 +280,7 @@ namespace PhysicalCharacter2D
 
             for (int i = 0; i < footsLand.Length; i++)
             {
-                footsLandSum += footsLand[i].touchingGround == animatorReferencer.footsLand[i].touchingGround? 1f : 0f;
+                footsLandSum += footsLand[i].touchingGround == animatorReferencer.footsLand[i].touchingGround? 0f : 1f;
                 //Debug.Log("foot " + i + ": " + animatorReferencer.footsLand[i].touchingGround);
             }
             footsLandSum /= footsLand.Length;
@@ -380,26 +376,6 @@ namespace PhysicalCharacter2D
             //return the value on a declining sigmoid shaped curve that decays from 1 to 0
             //This reward will approach 1 if it matches perfectly and approach zero as it deviates
             return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
-        }
-
-        /// <summary>
-        /// Agent touched the target
-        /// </summary>
-        public void TouchedTarget()
-        {
-            AddReward(1f);
-            EndEpisode();
-        }
-
-        public void SetTorsoMass()
-        {
-            m_JdController.bodyPartsDict[spine].rb.mass = m_ResetParams.GetWithDefault("spine_mass", 8);
-            m_JdController.bodyPartsDict[hips].rb.mass = m_ResetParams.GetWithDefault("hip_mass", 8);
-        }
-
-        public void SetResetParameters()
-        {
-            SetTorsoMass();
         }
     }
 }
