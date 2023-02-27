@@ -99,10 +99,11 @@ namespace PhysicalCharacter2D
 
             m_ResetParams = Academy.Instance.EnvironmentParameters;
 
-            endEffectors = new BodyPart[4]{m_JdController.bodyPartsDict[handL], 
+            endEffectors = new BodyPart[5]{m_JdController.bodyPartsDict[handL], 
                                         m_JdController.bodyPartsDict[handR], 
                                         m_JdController.bodyPartsDict[footL], 
-                                        m_JdController.bodyPartsDict[footR]};
+                                        m_JdController.bodyPartsDict[footR],
+                                        m_JdController.bodyPartsDict[head]};
 
             totalMass = 0f;
             foreach (var bp in m_JdController.bodyPartsDict.Values)

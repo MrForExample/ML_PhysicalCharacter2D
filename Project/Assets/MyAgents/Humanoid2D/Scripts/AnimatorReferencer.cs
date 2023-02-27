@@ -59,8 +59,8 @@ namespace PhysicalCharacter2D
                 refBp.bodyCOMLocalOffset = refBp.bodyTransform.InverseTransformVector(bp.rb.worldCenterOfMass - bp.rb.transform.position);
             }
 
-            endEffectors = new BodyReferencer[4];
-            endEffectorPos = new Vector3[4];
+            endEffectors = new BodyReferencer[5];
+            endEffectorPos = new Vector3[5];
             for (int i = 0; i < agent2D.endEffectors.Length; i++)
                 endEffectors[i] = bodyReferencersDict[agent2D.endEffectors[i].rb.name];
 
