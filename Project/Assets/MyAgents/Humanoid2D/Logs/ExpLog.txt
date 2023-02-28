@@ -1,0 +1,3 @@
+Mimic_Walk_7 - 12,14: Bone_Hip mass = 8; Bone_Body mass = 8;  Bone_Head mass = 4
+Mimic_Walk_10: Configured using Mimicker2D_Walk_Big.yaml
+Mimic_Walk_13: Bone_Hip mass = 15; Bone_Body mass = 14; Bone_Head mass = 5
