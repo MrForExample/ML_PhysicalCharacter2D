@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/MyAgents/Humanoid2D/Scenes/Humanoid2D_1.unity
+    path: Assets/MyAgents/Humanoid2D/Scenes/Humanoid2D_Walk.unity
     guid: a3fec57bbae313d4db19b0ab6d9495c9
   m_configObjects: {}
