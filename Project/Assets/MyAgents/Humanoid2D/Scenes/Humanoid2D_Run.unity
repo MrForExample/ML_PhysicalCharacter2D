@@ -1284,6 +1284,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2D
       objectReference: {fileID: 0}
+    - target: {fileID: 6965007910646877406, guid: a7829986f783dfe4d989b8e45dce62e6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6965007910646877407, guid: a7829986f783dfe4d989b8e45dce62e6,
         type: 3}
       propertyPath: m_RootOrder
