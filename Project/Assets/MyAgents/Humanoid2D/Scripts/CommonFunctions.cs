@@ -10,7 +10,25 @@ namespace PhysicalCharacter2D
         {
             return childRotation * Quaternion.Inverse(parentRotation);
         }
-        public static Vector3 CalculateAngularVelocity(Quaternion previousRotation, Quaternion currentRotation, float deltaTime)
+        public static Vector3 CalculateEulerAngleDiff(Quaternion last_rotation, Quaternion now_rotation)
+        {
+            Quaternion delta_rotation = now_rotation * Quaternion.Inverse(last_rotation);
+            Vector3 euler_rotation = new Vector3(
+                Mathf.DeltaAngle(0, delta_rotation.eulerAngles.x),
+                Mathf.DeltaAngle(0, delta_rotation.eulerAngles.y),
+                Mathf.DeltaAngle(0, delta_rotation.eulerAngles.z));
+            return euler_rotation;
+        }
+        public static Vector3 CalculateAngularVelocity(Quaternion last_rotation, Quaternion now_rotation, float deltaTime)
+        {
+            Vector3 euler_rotation = CalculateEulerAngleDiff(last_rotation, now_rotation);
+            Vector3 angular_velocity = euler_rotation / Time.fixedDeltaTime * Mathf.Deg2Rad;
+            return angular_velocity;
+        }
+        /// <summary>
+        /// Sometime value could be infinity!
+        /// </summary>
+        public static Vector3 CalculateAngularVelocityInf(Quaternion previousRotation, Quaternion currentRotation, float deltaTime)
         {
             Quaternion deltaRotation = CalculateLocalQuaternion(previousRotation, currentRotation);
             

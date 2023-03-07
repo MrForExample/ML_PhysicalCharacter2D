@@ -81,6 +81,8 @@ namespace PhysicalCharacter2D
         public BodyPart[] endEffectors;
         float totalMass;
 
+        Transform[,] limbArrays;
+
         public override void Initialize()
         {
             m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
@@ -103,26 +105,28 @@ namespace PhysicalCharacter2D
             m_JdController.SetupBodyPart(armR);
             m_JdController.SetupBodyPart(forearmR);
             m_JdController.SetupBodyPart(handR);
-            
-            var physicalFootL = new PhysicalBody(m_JdController.bodyPartsDict[footL].rb, m_JdController.bodyPartsDict[footL].joint);
-            var physicalShinL= new PhysicalBody(m_JdController.bodyPartsDict[shinL].rb, m_JdController.bodyPartsDict[shinL].joint);
-            var physicalThighL = new PhysicalBody(m_JdController.bodyPartsDict[thighL].rb, m_JdController.bodyPartsDict[thighL].joint);
-            allPhysicalLimbs.Add(new PhysicalLimb(physicalFootL, physicalShinL, physicalThighL, poleLegL, isDebug));
 
-            var physicalFootR = new PhysicalBody(m_JdController.bodyPartsDict[footR].rb, m_JdController.bodyPartsDict[footR].joint);
-            var physicalShinR = new PhysicalBody(m_JdController.bodyPartsDict[shinR].rb, m_JdController.bodyPartsDict[shinR].joint);
-            var physicalThighR = new PhysicalBody(m_JdController.bodyPartsDict[thighR].rb, m_JdController.bodyPartsDict[thighR].joint);
-            allPhysicalLimbs.Add(new PhysicalLimb(physicalFootR, physicalShinR, physicalThighR, poleLegR, isDebug));
+            limbArrays = new Transform[4,3]{
+                {footL, shinL, thighL},
+                {footR, shinR, thighR},
+                {handL, forearmL, armL},
+                {handR, forearmR, armR}
+            };
 
-            var physicalHandL = new PhysicalBody(m_JdController.bodyPartsDict[handL].rb, m_JdController.bodyPartsDict[handL].joint);
-            var physicalForearmL = new PhysicalBody(m_JdController.bodyPartsDict[forearmL].rb, m_JdController.bodyPartsDict[forearmL].joint);
-            var physicalArmL = new PhysicalBody(m_JdController.bodyPartsDict[armL].rb, m_JdController.bodyPartsDict[armL].joint);
-            allPhysicalLimbs.Add(new PhysicalLimb(physicalHandL, physicalForearmL, physicalArmL, poleArmL, isDebug));
+            var poleArrays = new Transform[4]{poleLegL, poleLegR, poleArmL, poleArmR};
 
-            var physicalHandR= new PhysicalBody(m_JdController.bodyPartsDict[handR].rb, m_JdController.bodyPartsDict[handR].joint);
-            var physicalForearmR = new PhysicalBody(m_JdController.bodyPartsDict[forearmR].rb, m_JdController.bodyPartsDict[forearmR].joint);
-            var physicalArmR = new PhysicalBody(m_JdController.bodyPartsDict[armR].rb, m_JdController.bodyPartsDict[armR].joint);
-            allPhysicalLimbs.Add(new PhysicalLimb(physicalHandR, physicalForearmR, physicalArmR, poleArmR, isDebug));
+            PhysicalBody[] physicalBodies = new PhysicalBody[3];
+            for (int iLimb = 0; iLimb < 4; iLimb++)
+            {
+                ConfigurableJoint lastJoint = null;
+                for (int iJoint = 0; iJoint < 3; iJoint++)
+                {
+                    var body = m_JdController.bodyPartsDict[limbArrays[iLimb, iJoint]];
+                    physicalBodies[iJoint] = new PhysicalBody(body.rb, body.joint, lastJoint);
+                    lastJoint = body.joint;
+                }
+                allPhysicalLimbs.Add(new PhysicalLimb(physicalBodies, poleArrays[iLimb], isDebug));
+            }
 
             footsLand = new GroundContact[2];
             footsLand[0] = footL.GetComponentInChildren<GroundContact>(true);
@@ -265,25 +269,14 @@ namespace PhysicalCharacter2D
             bpDict[spine].SetJointStrength(continuousActions[++i]);
             bpDict[head].SetJointStrength(continuousActions[++i]);
 
-            float legLStrength = continuousActions[++i];
-            bpDict[thighL].SetJointStrength(legLStrength);
-            bpDict[shinL].SetJointStrength(legLStrength);
-            bpDict[footL].SetJointStrength(legLStrength);
-
-            float legRStrength = continuousActions[++i];
-            bpDict[thighR].SetJointStrength(legRStrength);
-            bpDict[shinR].SetJointStrength(legRStrength);
-            bpDict[footR].SetJointStrength(legRStrength);
-
-            float armLStrength = continuousActions[++i];
-            bpDict[armL].SetJointStrength(armLStrength);
-            bpDict[forearmL].SetJointStrength(armLStrength);
-            bpDict[handL].SetJointStrength(armLStrength);
-            
-            float armRStrength = continuousActions[++i];
-            bpDict[armR].SetJointStrength(armRStrength);
-            bpDict[forearmR].SetJointStrength(armRStrength);
-            bpDict[handR].SetJointStrength(armRStrength);
+            for (int iLimb = 0; iLimb < 4; iLimb++)
+            {
+                float limbStrength = continuousActions[++i];
+                for (int iJoint = 0; iJoint < 3; iJoint++)
+                {
+                    bpDict[limbArrays[iLimb, iJoint]].SetJointStrength(limbStrength);
+                }
+            }
         }
 
         void UpdateOrientationObjects()

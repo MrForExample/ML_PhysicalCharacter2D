@@ -13,9 +13,9 @@ namespace PhysicalCharacter2D
         Quaternion joint_init_axis_rotation;
         Quaternion world_to_joint_space;
         Quaternion joint_to_world_space;
-        Quaternion last_joint_target_local_rotation;
+        Quaternion last_joint_target_local_rotation = Quaternion.identity;
 
-        public PhysicalBody(Rigidbody new_rg, ConfigurableJoint new_joint)
+        public PhysicalBody(Rigidbody new_rg, ConfigurableJoint new_joint, ConfigurableJoint child_joint = null)
         {
             rg = new_rg;
             joint = new_joint;
@@ -28,12 +28,11 @@ namespace PhysicalCharacter2D
             world_to_joint_space = Quaternion.LookRotation(forward, up);
             joint_to_world_space = Quaternion.Inverse(world_to_joint_space);
 
-            last_joint_target_local_rotation = Quaternion.identity;
+            last_joint_target_local_rotation = joint.targetRotation;
 
             // Calculate body's link length
-            var parent_joint = joint.connectedBody.GetComponent<ConfigurableJoint>();
-            if (parent_joint != null)
-                link_length = (CommonFunctions.GetNowJointPosition(joint) - CommonFunctions.GetNowJointPosition(parent_joint)).magnitude;
+            if (child_joint != null)
+                link_length = (CommonFunctions.GetNowJointPosition(child_joint) - CommonFunctions.GetNowJointPosition(joint)).magnitude;
         }
 
         public void SetJointPDTarget(Quaternion target_local_rotation, float deltaTime)
@@ -44,20 +43,22 @@ namespace PhysicalCharacter2D
             joint.targetRotation = joint_target_local_rotation;    
 
             // Set target angular velocity according to last and current real joint target rotation
-            Quaternion real_joint_target_local_rotation = joint_to_world_space * (Quaternion.Inverse(target_local_rotation) * joint_init_axis_rotation) * world_to_joint_space;
-            Vector3 now_target_angular_velocity = CommonFunctions.CalculateAngularVelocity(last_joint_target_local_rotation, real_joint_target_local_rotation, deltaTime);
+            Vector3 now_target_angular_velocity = CommonFunctions.CalculateAngularVelocity(last_joint_target_local_rotation, joint_target_local_rotation, deltaTime);
             joint.targetAngularVelocity = now_target_angular_velocity;
 
-            last_joint_target_local_rotation = real_joint_target_local_rotation;
+            last_joint_target_local_rotation = joint_target_local_rotation;
         }
     }
     public class PhysicalLimb
     {
         [HideInInspector]
         public PhysicalBody[] limb_bodies;
+        [HideInInspector]
+        public PhysicalBody end_body, lower_body, upper_body;
         float max_leg_extend_length, min_leg_extend_length;
         Vector3 max_target_c_dir, min_target_c_dir;
         Transform pole;
+        Transform rootParent;
 
         // Debug
         bool is_debug;
@@ -65,10 +66,13 @@ namespace PhysicalCharacter2D
         List<Tuple<Vector3, Vector3>> draw_lines = new List<Tuple<Vector3, Vector3>>();
         List<Color> lines_colors = new List<Color>();
 
-        public PhysicalLimb(PhysicalBody end_body, PhysicalBody lower_body, PhysicalBody upper_body, Transform pole_target, bool debug_activate = false)
+        public PhysicalLimb(PhysicalBody[] all_limb_bodies, Transform pole_target, bool debug_activate = false)
         {
-            limb_bodies = new PhysicalBody[3]{end_body, lower_body, upper_body};
+            limb_bodies = all_limb_bodies;
+            end_body = limb_bodies[0]; lower_body = limb_bodies[1]; upper_body = limb_bodies[2];
+            
             pole = pole_target;
+            rootParent = upper_body.joint.connectedBody.transform;
 
             max_leg_extend_length = lower_body.link_length + upper_body.link_length;
 
@@ -80,8 +84,8 @@ namespace PhysicalCharacter2D
             Vector3 target_c_dir = (end_joint_position - root_joint_position).normalized;
 
             // Quaternion.AngleAxis when axis pointing outwards, positive angle rotates vector clockwise 
-            max_target_c_dir = Quaternion.AngleAxis(upper_body.joint.highAngularXLimit.limit, Vector3.back) * target_c_dir;
-            min_target_c_dir = Quaternion.AngleAxis(upper_body.joint.lowAngularXLimit.limit, Vector3.back) * target_c_dir;
+            max_target_c_dir = rootParent.InverseTransformDirection(Quaternion.AngleAxis(upper_body.joint.highAngularXLimit.limit, Vector3.back) * target_c_dir);
+            min_target_c_dir = rootParent.InverseTransformDirection(Quaternion.AngleAxis(upper_body.joint.lowAngularXLimit.limit, Vector3.back) * target_c_dir);
 
             Vector3 ik_plane_normal = Vector3.Cross(target_c_dir, pole.position - root_joint_position);
 
@@ -111,12 +115,10 @@ namespace PhysicalCharacter2D
                          knee joint
             */
 
-            PhysicalBody body_u = limb_bodies[2];
-            PhysicalBody body_l = limb_bodies[1];
-            ConfigurableJoint joint_u = body_u.joint;
-            ConfigurableJoint joint_l = body_l.joint;
-            float upper_leg_length = body_u.link_length;
-            float lower_leg_length = body_l.link_length;
+            ConfigurableJoint joint_u = upper_body.joint;
+            ConfigurableJoint joint_l = lower_body.joint;
+            float upper_leg_length = upper_body.link_length;
+            float lower_leg_length = lower_body.link_length;
 
             // Get base height of upper joint for character to maintain
             Vector3 joint_pos_u = CommonFunctions.GetNowJointPosition(joint_u);
@@ -130,18 +132,22 @@ namespace PhysicalCharacter2D
             // Transform link-ik axis rotation from world-local-joint space
             Quaternion ik_joint_u_target_wrd_rot = Quaternion.LookRotation(target_a.normalized, ik_plane_normal);
             Quaternion ik_joint_u_target_loc_rot = Quaternion.Inverse(joint_u.connectedBody.transform.rotation) * ik_joint_u_target_wrd_rot;
-            Quaternion joint_u_target_loc_rot = ik_joint_u_target_loc_rot * body_u.ik_axis_bias;
+            Quaternion joint_u_target_loc_rot = ik_joint_u_target_loc_rot * upper_body.ik_axis_bias;
 
             Quaternion ik_joint_l_target_wrd_rot = Quaternion.LookRotation(target_b.normalized, ik_plane_normal);
             Quaternion ik_joint_l_target_loc_rot = Quaternion.Inverse(joint_l.connectedBody.transform.rotation) * ik_joint_l_target_wrd_rot;
-            Quaternion joint_l_target_loc_rot = ik_joint_l_target_loc_rot * body_l.ik_axis_bias;
+            Quaternion joint_l_target_loc_rot = ik_joint_l_target_loc_rot * lower_body.ik_axis_bias;
             
-            body_u.SetJointPDTarget(joint_u_target_loc_rot, deltaTime);
-            body_l.SetJointPDTarget(joint_l_target_loc_rot, deltaTime);
+            upper_body.SetJointPDTarget(joint_u_target_loc_rot, deltaTime);
+            lower_body.SetJointPDTarget(joint_l_target_loc_rot, deltaTime);
 
             // Debug
             if (is_debug)
             {
+                draw_triangles.Clear();
+                draw_lines.Clear();
+                lines_colors.Clear();
+
                 Vector3 ik_plane_center = (joint_pos_l + joint_pos_u + now_target_end_point) / 3f;
                 draw_lines.Add(new Tuple<Vector3, Vector3>(ik_plane_center, ik_plane_center + ik_plane_normal));
                 lines_colors.Add(Color.white);
@@ -154,23 +160,26 @@ namespace PhysicalCharacter2D
                 lines_colors.Add(Color.blue);
             }
         }
+        /// <summary>
+        /// Both dir_a and len_a should be in range [-1f, 1f]
+        /// </summary>
         public Vector3 CalculateTargetEndPoint(float dir_a, float len_a)
         {
             dir_a = (dir_a + 1f) * 0.5f;
             len_a = (len_a + 1f) * 0.5f;
 
-            var target_c = Vector3.Slerp(min_target_c_dir, max_target_c_dir, dir_a).normalized * Mathf.Lerp(min_leg_extend_length, max_leg_extend_length, len_a);
+            var target_c = rootParent.TransformDirection(Vector3.Slerp(min_target_c_dir, max_target_c_dir, dir_a).normalized) * Mathf.Lerp(min_leg_extend_length, max_leg_extend_length, len_a);
             return CommonFunctions.GetNowJointPosition(limb_bodies[2].joint) + target_c;
         }
 
         public void DebugDraw()
         {
             // Draw IK triangles
+            Gizmos.color = Color.green;
             for (int i = 0; i < draw_triangles.Count; i++)
             {
-                Gizmos.color = Color.red;
                 Gizmos.DrawLine(draw_triangles[i], draw_triangles[(i+1) % 3 == 0 ? i-2 : i+1]);
-                Gizmos.DrawSphere(draw_triangles[i], 0.05f);
+                Gizmos.DrawSphere(draw_triangles[i], 0.1f);
             }
             // Draw line
             for (int i = 0; i < draw_lines.Count; i++)
@@ -178,6 +187,9 @@ namespace PhysicalCharacter2D
                 Gizmos.color = lines_colors[i];
                 Gizmos.DrawLine(draw_lines[i].Item1, draw_lines[i].Item2);
             }
+            // Draw pole
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(pole.position, 0.065f);
         }
     }
 }
