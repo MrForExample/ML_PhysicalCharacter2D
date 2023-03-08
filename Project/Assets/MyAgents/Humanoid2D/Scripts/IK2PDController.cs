@@ -40,7 +40,7 @@ namespace PhysicalCharacter2D
             // Matrix change of basis, Transform difference of local rotation back into joint space
             Quaternion joint_target_local_rotation = joint_to_world_space * (Quaternion.Inverse(target_local_rotation) * joint_init_axis_rotation) * world_to_joint_space;
             // Set target rotation to our newly calculated rotation
-            joint.targetRotation = joint_target_local_rotation;    
+            joint.targetRotation = joint_target_local_rotation;
 
             // Set target angular velocity according to last and current real joint target rotation
             Vector3 now_target_angular_velocity = CommonFunctions.CalculateAngularVelocity(last_joint_target_local_rotation, joint_target_local_rotation, deltaTime);
@@ -55,8 +55,8 @@ namespace PhysicalCharacter2D
         public PhysicalBody[] limb_bodies;
         [HideInInspector]
         public PhysicalBody end_body, lower_body, upper_body;
-        float max_leg_extend_length, min_leg_extend_length;
-        Vector3 max_target_c_dir, min_target_c_dir;
+        float max_leg_rotate_angle, min_leg_rotate_angle, max_leg_extend_length, min_leg_extend_length;
+        Vector3 original_target_c;
         Transform pole;
         Transform rootParent;
 
@@ -83,9 +83,10 @@ namespace PhysicalCharacter2D
             Vector3 root_joint_position = CommonFunctions.GetNowJointPosition(upper_body.joint);
             Vector3 target_c_dir = (end_joint_position - root_joint_position).normalized;
 
-            // Quaternion.AngleAxis when axis pointing outwards, positive angle rotates vector clockwise 
-            max_target_c_dir = rootParent.InverseTransformDirection(Quaternion.AngleAxis(upper_body.joint.highAngularXLimit.limit, Vector3.back) * target_c_dir);
-            min_target_c_dir = rootParent.InverseTransformDirection(Quaternion.AngleAxis(upper_body.joint.lowAngularXLimit.limit, Vector3.back) * target_c_dir);
+            // Quaternion.AngleAxis when axis pointing outwards, positive angle rotates vector clockwise
+            max_leg_rotate_angle = upper_body.joint.highAngularXLimit.limit;
+            min_leg_rotate_angle = upper_body.joint.lowAngularXLimit.limit;
+            original_target_c = rootParent.InverseTransformDirection(target_c_dir);
 
             Vector3 ik_plane_normal = Vector3.Cross(target_c_dir, pole.position - root_joint_position);
 
@@ -168,8 +169,9 @@ namespace PhysicalCharacter2D
             dir_a = (dir_a + 1f) * 0.5f;
             len_a = (len_a + 1f) * 0.5f;
 
-            var target_c = rootParent.TransformDirection(Vector3.Slerp(min_target_c_dir, max_target_c_dir, dir_a).normalized) * Mathf.Lerp(min_leg_extend_length, max_leg_extend_length, len_a);
-            return CommonFunctions.GetNowJointPosition(limb_bodies[2].joint) + target_c;
+            var target_c = rootParent.TransformDirection(Quaternion.AngleAxis(Mathf.Lerp(min_leg_rotate_angle, max_leg_rotate_angle, dir_a), Vector3.back) * original_target_c)
+                            * Mathf.Lerp(min_leg_extend_length, max_leg_extend_length, len_a);
+            return CommonFunctions.GetNowJointPosition(upper_body.joint) + target_c;
         }
 
         public void DebugDraw()

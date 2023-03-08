@@ -36,6 +36,10 @@ public class IK2PDLimbTester : MonoBehaviour
     [Header("Debug")]
     public float controlRadius = 1f;
     public bool isDebug = true;
+    [Range(-1f, 1f)]
+    public float dir_a = 0f;
+    [Range(-1f, 1f)]
+    public float len_a = 0f;
 
     void Start()
     {
@@ -80,8 +84,9 @@ public class IK2PDLimbTester : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        ControlTargetByMouse();
+        //ControlTargetByMouse();
         //Target2IK2PD();
+        Params2IK2PD();
     }
 
     void ControlTargetByMouse()
@@ -119,15 +124,22 @@ public class IK2PDLimbTester : MonoBehaviour
         }
     }
 
+    void Params2IK2PD()
+    {
+        for (int i = 0; i < allPhysicalLimbs.Count; i++)
+        {
+            allPhysicalLimbs[i].LimbIKMoveToTargrtPoint(allPhysicalLimbs[i].CalculateTargetEndPoint(dir_a, len_a), Time.fixedDeltaTime);
+        }
+    }
+
     void OnDrawGizmos()
     {
         if (isDebug)
         {
-            /*
             foreach (var limb in allPhysicalLimbs)
                 limb.DebugDraw();
-            */
 
+            /*
             if (currentEndTargetIndex >= 0)
             {
                 if (Input.GetMouseButton(0))
@@ -136,6 +148,7 @@ public class IK2PDLimbTester : MonoBehaviour
                 Gizmos.color = Color.red;
                 Gizmos.DrawSphere(limbEndTargets[currentEndTargetIndex], 0.1f);
             }
+            */
         }
     }
 }
