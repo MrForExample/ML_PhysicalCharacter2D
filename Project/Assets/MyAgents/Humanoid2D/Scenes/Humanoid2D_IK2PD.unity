@@ -465,20 +465,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4345175846389135207, guid: 51090255eef30cd45ab203e44070a678,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4345175848017107169, guid: 51090255eef30cd45ab203e44070a678,
         type: 3}
       propertyPath: m_IsKinematic
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5983217207274834387, guid: 51090255eef30cd45ab203e44070a678,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7247884616849753224, guid: 51090255eef30cd45ab203e44070a678,
         type: 3}
