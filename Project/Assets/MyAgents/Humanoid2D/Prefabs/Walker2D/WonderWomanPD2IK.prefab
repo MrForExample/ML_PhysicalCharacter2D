@@ -4712,19 +4712,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 341
+    VectorObservationSize: 302
     NumStackedVectorObservations: 1
     m_ActionSpec:
-      m_NumContinuousActions: 24
+      m_NumContinuousActions: 20
       BranchSizes: 
-    VectorActionSize: 18000000
+    VectorActionSize: 14000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 2
   m_BehaviorType: 0
-  m_BehaviorName: PD2IKAgent
+  m_BehaviorName: IK2PDAgent
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -4747,8 +4747,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   animatorReferencer: {fileID: 0}
-  m_TargetWalkingSpeed: 4
-  randomizeWalkSpeedEachEpisode: 0
+  targetWalkingSpeed: 4
   hips: {fileID: 3279725472734664981}
   spine: {fileID: 3279725471358063687}
   head: {fileID: 3279725473144710479}
@@ -4771,7 +4770,6 @@ MonoBehaviour:
   isDebug: 0
   footsLand: []
   m_JdController: {fileID: 0}
-  endEffectors: []
 --- !u!114 &3279725472181483171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4800,7 +4798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
+  DecisionPeriod: 3
   TakeActionsBetweenDecisions: 0
 --- !u!114 &3279725472181483169
 MonoBehaviour:

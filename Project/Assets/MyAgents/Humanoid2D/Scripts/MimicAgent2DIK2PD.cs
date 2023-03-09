@@ -7,32 +7,19 @@ using Unity.MLAgentsExamples;
 using Unity.MLAgents.Sensors;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 using Random = UnityEngine.Random;
+using EffectorReferencer = PhysicalCharacter2D.AnimatorReferencerIK2PD.EffectorReferencer;
 
 namespace PhysicalCharacter2D
 {
     public class MimicAgent2DIK2PD : Agent
     {
         [Header("Reference motion")]
-        public AnimatorReferencer animatorReferencer;
+        public AnimatorReferencerIK2PD animatorReferencer;
 
         [Header("Walk Speed")]
         [Range(0.1f, 10)]
-        [SerializeField]
         //The walking speed to try and achieve
-        private float m_TargetWalkingSpeed = 10;
-
-        public float MTargetWalkingSpeed // property
-        {
-            get { return m_TargetWalkingSpeed; }
-            set { m_TargetWalkingSpeed = Mathf.Clamp(value, .1f, m_maxWalkingSpeed); }
-        }
-
-        const float m_maxWalkingSpeed = 10; //The max walking speed
-
-        //Should the agent sample a new goal velocity each episode?
-        //If true, walkSpeed will be randomly set between zero and m_maxWalkingSpeed in OnEpisodeBegin()
-        //If false, the goal velocity will be walkingSpeed
-        public bool randomizeWalkSpeedEachEpisode;
+        public float targetWalkingSpeed = 4;
 
         //The direction an agent will walk during training.
         private Vector3 m_WorldDirToWalk = Vector3.right;
@@ -60,7 +47,8 @@ namespace PhysicalCharacter2D
         public Transform poleArmL;
         public Transform poleArmR;
 
-        List<PhysicalLimb> allPhysicalLimbs = new List<PhysicalLimb>();
+        [HideInInspector]
+        public List<PhysicalLimb> allPhysicalLimbs = new List<PhysicalLimb>();
 
         [Header("Debug")]
         public bool isDebug = false;
@@ -75,10 +63,6 @@ namespace PhysicalCharacter2D
         public JointDriveController m_JdController;
         EnvironmentParameters m_ResetParams;
 
-        DecisionRequester decisionRequester;
-
-        [HideInInspector]
-        public BodyPart[] endEffectors;
         float totalMass;
 
         Transform[,] limbArrays;
@@ -86,7 +70,6 @@ namespace PhysicalCharacter2D
         public override void Initialize()
         {
             m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
-            decisionRequester = GetComponentInChildren<DecisionRequester>();
 
             //Setup each body part
             m_JdController = GetComponent<JointDriveController>();
@@ -134,12 +117,6 @@ namespace PhysicalCharacter2D
 
             m_ResetParams = Academy.Instance.EnvironmentParameters;
 
-            endEffectors = new BodyPart[5]{m_JdController.bodyPartsDict[handL], 
-                                        m_JdController.bodyPartsDict[handR], 
-                                        m_JdController.bodyPartsDict[footL], 
-                                        m_JdController.bodyPartsDict[footR],
-                                        m_JdController.bodyPartsDict[head]};
-
             totalMass = 0f;
             foreach (var bp in m_JdController.bodyPartsDict.Values)
                 totalMass += bp.rb.mass;
@@ -158,10 +135,6 @@ namespace PhysicalCharacter2D
 
             UpdateOrientationObjects();
 
-            //Set our goal walking speed
-            MTargetWalkingSpeed =
-                randomizeWalkSpeedEachEpisode ? Random.Range(0.1f, m_maxWalkingSpeed) : MTargetWalkingSpeed;
-
             ReferenceStateInitialization();
         }
         void ReferenceStateInitialization()
@@ -179,6 +152,18 @@ namespace PhysicalCharacter2D
             }
         }
 
+        public void CollectObservationLimb(PhysicalLimb limb, EffectorReferencer effectorRef, Vector2 hipPos, VectorSensor sensor)
+        {
+            // Root&End joints offset for both reference and simulated agent
+            sensor.AddObservation(effectorRef.rootEffectorOffset);
+            sensor.AddObservation(effectorRef.endEffectorOffset);
+
+            Vector2 root_joint_position = CommonFunctions.GetNowJointPosition(limb.upper_body.joint);
+            Vector2 end_joint_position = CommonFunctions.GetNowJointPosition(limb.end_body.joint);
+            sensor.AddObservation(root_joint_position - hipPos);
+            sensor.AddObservation(end_joint_position - root_joint_position);
+            // state size: 8
+        }
         /// <summary>
         /// Add relevant information on each body part to observations.
         /// </summary>
@@ -186,34 +171,37 @@ namespace PhysicalCharacter2D
         {
             // Reference motion
             var refBp = animatorReferencer.bodyReferencersDict[bp.rb.name];
-            sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(CommonFunctions.CalculateAngularVelocity(refBp.bodyLastQuaternion, refBp.bodyTransform.rotation, Time.fixedDeltaTime * decisionRequester.DecisionPeriod)));
+            sensor.AddObservation(CommonFunctions.CalculateAngularVelocity(refBp.bodyLastQuaternion, refBp.bodyTransform.rotation, Time.fixedDeltaTime));
             sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(refBp.bodyLastQuaternion, m_OrientationCube.transform.rotation));
 
             //Ground Check
             sensor.AddObservation(bp.groundContact.touchingGround); // Is this bp touching the ground
 
-            //Get velocities in the context of our orientation cube's space
-            //Note: You can get these velocities in world space as well but it may not train as well.
-            sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.velocity));
-            sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.angularVelocity));
+            //Get velocities
+            Vector2 rbVel = bp.rb.velocity;
+            sensor.AddObservation(rbVel);
+            sensor.AddObservation(bp.rb.angularVelocity.z);
 
-            //sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(bp.rb.rotation, m_OrientationCube.transform.rotation));
             sensor.AddObservation(bp.rb.transform.localRotation);
-            // state size: 18
+            // state size: 15
 
             if (bp.rb.transform != hips)
             {
-                //Get position relative to hips in the context of our orientation cube's space
-                sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.position - hips.position));
+                //Get position relative to hips for both reference and simulated agent 
+                Vector2 refPosDiff = refBp.bodyLastPosition - animatorReferencer.hips.bodyLastPosition;
+                sensor.AddObservation(refPosDiff);
+                
+                Vector2 posDiff = bp.rb.position - hips.position;
+                sensor.AddObservation(posDiff);
                 sensor.AddObservation(bp.currentStrength / m_JdController.maxJointForceLimit);
-                // state size: 22
+                // state size: 20
             }
             else
             {
                 // Add root height for both reference and simulated agent 
-                sensor.AddObservation(refBp.bodyTransform.position.y);
+                sensor.AddObservation(refBp.bodyLastPosition.y);
                 sensor.AddObservation(hips.position.y);
-                // state size: 20
+                // state size: 17
             }
         }
 
@@ -225,17 +213,17 @@ namespace PhysicalCharacter2D
             var cubeForward = m_OrientationCube.transform.forward;
 
             //velocity we want to match
-            Vector2 velGoal = cubeForward * MTargetWalkingSpeed;
+            Vector2 velGoal = cubeForward * targetWalkingSpeed;
             //ragdoll's avg vel
             Vector2 avgVel = GetAvgVelocity();
 
             //current ragdoll velocity. normalized
             sensor.AddObservation(Vector2.Distance(velGoal, avgVel));
-            //avg body vel relative to cube
-            Vector2 avgVelLocal = m_OrientationCube.transform.InverseTransformDirection(avgVel);
+            //avg body vel
+            Vector2 avgVelLocal = avgVel;
             sensor.AddObservation(avgVelLocal);
-            //vel goal relative to cube
-            Vector2 velGoalLocal = m_OrientationCube.transform.InverseTransformDirection(velGoal);
+            //vel goal
+            Vector2 velGoalLocal = velGoal;
             sensor.AddObservation(velGoalLocal);
 
             //rotation deltas
@@ -245,7 +233,11 @@ namespace PhysicalCharacter2D
 
             foreach (var bodyPart in m_JdController.bodyPartsList)
                 CollectObservationBodyPart(bodyPart, sensor);
-            // state size: 13 + 328
+            // state size: 13 + 20 * 14 + 17 = 270
+
+            for (int i = 0; i < allPhysicalLimbs.Count; i++)
+                CollectObservationLimb(allPhysicalLimbs[i], animatorReferencer.effectorRefs[i], hips.position, sensor);
+            // state size: 270 + 8 * 4 = 302
         }
 
         public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -273,10 +265,9 @@ namespace PhysicalCharacter2D
             {
                 float limbStrength = continuousActions[++i];
                 for (int iJoint = 0; iJoint < 3; iJoint++)
-                {
                     bpDict[limbArrays[iLimb, iJoint]].SetJointStrength(limbStrength);
-                }
             }
+            // action size: 20
         }
 
         void UpdateOrientationObjects()
@@ -295,17 +286,21 @@ namespace PhysicalCharacter2D
 
             animatorReferencer.RecordAllBodiesLastTarget();
         }
-        float wp = 0.65f, wv = 0.1f, we = 0.15f, wc = 0.1f, wl = 0.1f;
-        //float wps = -2f, wvs = -0.1f, wes = -40f, wcs = -10f;
+        float wp = 0.35f, wv = 0.1f, we = 0.35f, wc = 0.1f, wl = 0.1f;
         float wps = -2f, wvs = -4f, wes = -4f, wcs = -10f, wls = -10f;
         float CalculateImitationReward()
         {
             float rotDiffSum = 0f, angularVelDiffSum = 0f, endDiffSum = 0f, cOMDiffSum = 0f, footsLandSum = 0f;
 
-            Vector3 hipPos = m_JdController.bodyPartsDict[hips].rb.position;
-            for (int i = 0; i < endEffectors.Length; i++)
+            Vector2 refHipPos = m_JdController.bodyPartsDict[hips].rb.position;
+            Vector2 hipPos = hips.position;
+            for (int i = 0; i < allPhysicalLimbs.Count; i++)
             {
-                endDiffSum += Vector3.SqrMagnitude(animatorReferencer.endEffectorPos[i] - (endEffectors[i].rb.position - hipPos));
+                var limb = allPhysicalLimbs[i];
+                Vector2 root_joint_position = CommonFunctions.GetNowJointPosition(limb.upper_body.joint);
+                Vector2 end_joint_position = CommonFunctions.GetNowJointPosition(limb.end_body.joint);
+                endDiffSum += Vector2.SqrMagnitude((root_joint_position - hipPos) - animatorReferencer.effectorRefs[i].rootEffectorOffset);
+                endDiffSum += Vector2.SqrMagnitude((end_joint_position - root_joint_position) - animatorReferencer.effectorRefs[i].endEffectorOffset);
             }
 
             for (int i = 0; i < footsLand.Length; i++)
@@ -316,9 +311,9 @@ namespace PhysicalCharacter2D
             footsLandSum /= footsLand.Length;
 
             float angle  = 0.0f;
-            Vector3 axis = Vector3.zero,
-                    worldCOM = new Vector3(0f, m_JdController.bodyPartsDict[hips].rb.worldCenterOfMass.y), 
-                    targetWorldCOM = new Vector3(0f, animatorReferencer.bodyReferencersDict[hips.name].bodyLastCOM.y);
+            Vector3 axis = Vector3.zero;
+            Vector2 worldCOM = new Vector3(0f, m_JdController.bodyPartsDict[hips].rb.worldCenterOfMass.y), 
+                    targetWorldCOM = new Vector2(0f, animatorReferencer.bodyReferencersDict[hips.name].bodyLastCOM.y);
             foreach (var bp in m_JdController.bodyPartsDict.Values)
             {
                 var refBp = animatorReferencer.bodyReferencersDict[bp.rb.name];
@@ -328,12 +323,13 @@ namespace PhysicalCharacter2D
                 rotDiffSum += Mathf.Pow(angle * Mathf.Deg2Rad, 2f);
 
                 Vector3 targetAngularVel = CommonFunctions.CalculateAngularVelocity(refBp.bodyLastQuaternion, refBp.bodyTransform.rotation, Time.fixedDeltaTime);
-                angularVelDiffSum += Vector3.SqrMagnitude(targetAngularVel - bp.rb.angularVelocity);
+                angularVelDiffSum += Mathf.Pow(targetAngularVel.z - bp.rb.angularVelocity.z, 2f);
 
-                worldCOM += (bp.rb.worldCenterOfMass - m_JdController.bodyPartsDict[hips].rb.worldCenterOfMass) * bp.rb.mass;
+                Vector2 cOM= (bp.rb.worldCenterOfMass - m_JdController.bodyPartsDict[hips].rb.worldCenterOfMass) * bp.rb.mass;
+                worldCOM += cOM;
                 targetWorldCOM += (refBp.bodyLastCOM - animatorReferencer.hips.bodyLastCOM) * bp.rb.mass;
             }
-            cOMDiffSum = Vector3.SqrMagnitude((targetWorldCOM - worldCOM) / totalMass);
+            cOMDiffSum = Vector2.SqrMagnitude((targetWorldCOM - worldCOM) / totalMass);
             
             float rp = wp * Mathf.Exp(wps * rotDiffSum);
             float rv = wv * Mathf.Exp(wvs * angularVelDiffSum);
@@ -361,7 +357,7 @@ namespace PhysicalCharacter2D
             // Set reward for this step according to mixture of the following elements.
             // a. Match target speed
             //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-            float rg = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocity());
+            float rg = GetMatchingVelocityReward(cubeForward * targetWalkingSpeed, GetAvgVelocity());
 
             //Check for NaNs
             if (float.IsNaN(rg))
@@ -370,7 +366,7 @@ namespace PhysicalCharacter2D
                     "NaN in task reward.\n" +
                     $" cubeForward: {cubeForward}\n" + 
                     $" head.forward: {head.forward}\n" + 
-                    $" maximumWalkingSpeed: {m_maxWalkingSpeed}\n" +
+                    $" targetWalkingSpeed: {targetWalkingSpeed}\n" +
                     $" hips.velocity: {m_JdController.bodyPartsDict[hips].rb.velocity}"
                 );
             }
@@ -401,11 +397,11 @@ namespace PhysicalCharacter2D
         public float GetMatchingVelocityReward(Vector3 velocityGoal, Vector3 actualVelocity)
         {
             //distance between our actual velocity and goal velocity
-            var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(actualVelocity, velocityGoal), 0, MTargetWalkingSpeed);
+            var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(actualVelocity, velocityGoal), 0, targetWalkingSpeed);
 
             //return the value on a declining sigmoid shaped curve that decays from 1 to 0
             //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-            return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
+            return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / targetWalkingSpeed, 2), 2);
         }
 
         void OnDrawGizmos()
