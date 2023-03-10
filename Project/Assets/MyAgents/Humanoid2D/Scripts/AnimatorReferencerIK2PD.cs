@@ -80,6 +80,8 @@ namespace PhysicalCharacter2D
                 refBp.bodyCOMLocalOffset = refBp.bodyTransform.InverseTransformVector(bp.rb.worldCenterOfMass - bp.rb.transform.position);
             }
 
+            hips = bodyReferencersDict[agent2D.hips.name];
+
             foreach (var limb in agent2D.allPhysicalLimbs)
             {
                 Transform rootJointParent = limb.upper_body.joint.connectedBody.transform;
@@ -95,8 +97,6 @@ namespace PhysicalCharacter2D
                 var newEffectorRef = new EffectorReferencer(newRootJointLocalOffset, newEndJointLocalOffset, hips.bodyTransform, newRootJointParent, newEndJointParent);
                 effectorRefs.Add(newEffectorRef);
             }
-
-            hips = bodyReferencersDict[agent2D.hips.name];
 
             if (disableSpritesRender)
             {
