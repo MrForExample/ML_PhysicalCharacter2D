@@ -54,6 +54,13 @@ namespace PhysicalCharacter2D
         public Transform forearmR;
         public Transform handR;
 
+        [Header("Hips PD follow reference")]
+        public float posFrequency = 100f;
+        public float posDamping = 1f;
+        public float rotFrequency = 100f;
+        public float rotDamping = 1f;
+        float refLastPos;
+
         [HideInInspector]
         public GroundContact[] footsLand;
 
@@ -128,6 +135,8 @@ namespace PhysicalCharacter2D
                 randomizeWalkSpeedEachEpisode ? Random.Range(0.1f, m_maxWalkingSpeed) : MTargetWalkingSpeed;
 
             ReferenceStateInitialization();
+
+            refLastPos = animatorReferencer.bodyReferencersDict[hips.name].bodyTransform.position.y;
         }
         void ReferenceStateInitialization()
         {
@@ -176,7 +185,7 @@ namespace PhysicalCharacter2D
             else
             {
                 // Add root height for both reference and simulated agent 
-                sensor.AddObservation(refBp.bodyTransform.position.y);
+                sensor.AddObservation(refBp.bodyLastPosition.y);
                 sensor.AddObservation(hips.position.y);
                 // state size: 20
             }
@@ -263,6 +272,8 @@ namespace PhysicalCharacter2D
             float ri = CalculateImitationReward();
             float rg = CalculateTaskReward();
             AddReward(wi * ri + wg * rg);
+
+            RbPDFollowRef(animatorReferencer.bodyReferencersDict[hips.name].bodyTransform, m_JdController.bodyPartsDict[hips].rb, Time.fixedDeltaTime);
 
             animatorReferencer.RecordAllBodiesLastTarget();
         }
@@ -377,6 +388,20 @@ namespace PhysicalCharacter2D
             //return the value on a declining sigmoid shaped curve that decays from 1 to 0
             //This reward will approach 1 if it matches perfectly and approach zero as it deviates
             return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
+        }
+
+        void RbPDFollowRef(Transform refObj, Rigidbody rb, float deltaTime)
+        {
+            // Vertical PD Follow
+            float targetPos = refObj.position.y;
+            float targetVel = (targetPos - refLastPos) / deltaTime;
+            float targetForce = CommonFunctions.CalculatePDForce1DStable(targetPos, targetVel, rb.position.y, rb.velocity.y, posFrequency, posDamping, deltaTime);
+            rb.AddForce(new Vector3(0f, targetForce));
+            refLastPos = targetPos;
+
+            // Rotation PD Follow
+            Vector3 targetTorque = CommonFunctions.CalculatePDTorque(refObj.rotation, rb.transform.rotation, rb, rotFrequency, rotDamping, deltaTime);
+            rb.AddTorque(targetTorque);
         }
     }
 }

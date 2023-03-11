@@ -233,11 +233,11 @@ namespace PhysicalCharacter2D
 
             foreach (var bodyPart in m_JdController.bodyPartsList)
                 CollectObservationBodyPart(bodyPart, sensor);
-            // state size: 13 + 20 * 14 + 17 = 270
+            // state size: 13 + 20 * 14 + 17 = 310
 
             for (int i = 0; i < allPhysicalLimbs.Count; i++)
                 CollectObservationLimb(allPhysicalLimbs[i], animatorReferencer.effectorRefs[i], hips.position, sensor);
-            // state size: 270 + 8 * 4 = 302
+            // state size: 310 + 8 * 4 = 342
         }
 
         public override void OnActionReceived(ActionBuffers actionBuffers)

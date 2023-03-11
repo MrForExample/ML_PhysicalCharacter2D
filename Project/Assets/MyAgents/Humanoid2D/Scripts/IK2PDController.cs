@@ -6,7 +6,7 @@ namespace PhysicalCharacter2D
 {
     public class PhysicalBody
     {
-        public Rigidbody rg;
+        public Rigidbody rb;
         public ConfigurableJoint joint;
         public float link_length;
         public Quaternion ik_axis_bias;
@@ -15,9 +15,9 @@ namespace PhysicalCharacter2D
         Quaternion joint_to_world_space;
         Quaternion last_joint_target_local_rotation = Quaternion.identity;
 
-        public PhysicalBody(Rigidbody new_rg, ConfigurableJoint new_joint, ConfigurableJoint child_joint = null)
+        public PhysicalBody(Rigidbody new_rb, ConfigurableJoint new_joint, ConfigurableJoint child_joint = null)
         {
-            rg = new_rg;
+            rb = new_rb;
             joint = new_joint;
 
             joint_init_axis_rotation = joint.transform.localRotation;

@@ -1,3 +1,8 @@
-Mimic_Walk_7 - 12,14: Bone_Hip mass = 8; Bone_Body mass = 8;  Bone_Head mass = 4
+Mimic_Walk_7 - 12,14,15,17: Bone_Hip mass = 8; Bone_Body mass = 8;  Bone_Head mass = 4; minimum DOF
 Mimic_Walk_10: Configured using Mimicker2D_Walk_Big.yaml
 Mimic_Walk_13: Bone_Hip mass = 15; Bone_Body mass = 14; Bone_Head mass = 5
+Mimic_Walk_15: Configured using Mimicker2D_Walk_Small.yaml
+Mimic_Walk_16: Configured using Mimicker2D_Walk_Small.yaml; maximum DOF
+Mimicker2D_IK2PD_Walk_0: maximum DOF, miscalculated observation size...
+Mimicker2D_IK2PD_Walk_1: minimum DOF, Configured using IK2PD/Mimicker2D_IK2PD_Walk_Small.yaml
+	mlagents-learn config/ppo/IK2PD/Mimicker2D_IK2PD_Walk_Small.yaml --run-id=Mimicker2D_IK2PD_Walk_1 --num-areas=12

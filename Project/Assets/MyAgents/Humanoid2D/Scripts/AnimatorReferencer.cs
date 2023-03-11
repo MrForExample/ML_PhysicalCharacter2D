@@ -25,6 +25,7 @@ namespace PhysicalCharacter2D
             public Transform bodyTransform;
             public Quaternion bodyLastQuaternion;
             public Quaternion bodyLastLocalQuaternion;
+            public Vector2 bodyLastPosition;
             public Vector3 bodyLastCOM;
             public Vector3 bodyCOMLocalOffset;
             public BodyReferencer(Transform newBodyTransform)
@@ -35,6 +36,7 @@ namespace PhysicalCharacter2D
             {
                 bodyLastQuaternion = bodyTransform.rotation;
                 bodyLastLocalQuaternion = bodyTransform.localRotation;
+                bodyLastPosition = bodyTransform.position;
                 bodyLastCOM = bodyTransform.position + bodyTransform.TransformVector(bodyCOMLocalOffset);
             }
         }

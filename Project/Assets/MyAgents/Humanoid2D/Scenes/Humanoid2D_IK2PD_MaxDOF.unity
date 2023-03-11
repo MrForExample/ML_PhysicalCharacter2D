@@ -190,6 +190,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2DPD2IK (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 7247884616849753225, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51090255eef30cd45ab203e44070a678, type: 3}
 --- !u!1001 &101962441
@@ -258,6 +263,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MimicTarget2DPD2IK (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7247884616849753225, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51090255eef30cd45ab203e44070a678, type: 3}
@@ -328,6 +338,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2DPD2IK (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 7247884616849753225, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51090255eef30cd45ab203e44070a678, type: 3}
 --- !u!1001 &577869931
@@ -396,6 +411,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MimicTarget2DPD2IK (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7247884616849753225, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51090255eef30cd45ab203e44070a678, type: 3}
@@ -466,6 +486,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2DPD2IK (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 7247884616849753225, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51090255eef30cd45ab203e44070a678, type: 3}
 --- !u!1001 &668838965
@@ -534,6 +559,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MimicTarget2DPD2IK (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7247884616849753225, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51090255eef30cd45ab203e44070a678, type: 3}
@@ -761,6 +791,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2DPD2IK (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 7247884616849753225, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51090255eef30cd45ab203e44070a678, type: 3}
 --- !u!1 &1004019779
@@ -929,6 +964,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2DPD2IK (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 7247884616849753225, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51090255eef30cd45ab203e44070a678, type: 3}
 --- !u!1001 &1024287435
@@ -997,6 +1037,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MimicTarget2DPD2IK (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7247884616849753225, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51090255eef30cd45ab203e44070a678, type: 3}
@@ -1067,6 +1112,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2DPD2IK (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7247884616849753225, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51090255eef30cd45ab203e44070a678, type: 3}
 --- !u!1001 &1444874826
@@ -1135,6 +1185,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MimicTarget2DPD2IK (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7247884616849753225, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51090255eef30cd45ab203e44070a678, type: 3}
@@ -1229,6 +1284,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4345175846389135206, guid: 51090255eef30cd45ab203e44070a678,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 67c15d5859f2d0b4a9c1c9b0a3fb2102,
+        type: 3}
     - target: {fileID: 7247884616849753224, guid: 51090255eef30cd45ab203e44070a678,
         type: 3}
       propertyPath: m_RootOrder
