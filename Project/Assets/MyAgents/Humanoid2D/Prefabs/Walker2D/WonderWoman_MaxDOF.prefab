@@ -6567,10 +6567,10 @@ MonoBehaviour:
   armR: {fileID: 2315526518917096694}
   forearmR: {fileID: 6687982232901956860}
   handR: {fileID: 2412856545459057101}
-  posFrequency: 300
-  posDamping: 3
-  rotFrequency: 300
-  rotDamping: 3
+  posFrequency: 0
+  posDamping: 0
+  rotFrequency: 10
+  rotDamping: 0.1
   footsLand:
   - {fileID: 0}
   - {fileID: 0}
