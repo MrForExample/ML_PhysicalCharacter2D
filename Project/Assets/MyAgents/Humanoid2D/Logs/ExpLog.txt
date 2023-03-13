@@ -7,6 +7,11 @@ Mimicker2D_IK2PD_Walk_0: maximum DOF, miscalculated observation size...
 Mimicker2D_IK2PD_Walk_1: minimum DOF, Configured using IK2PD/Mimicker2D_IK2PD_Walk_Small.yaml
 	mlagents-learn config/ppo/IK2PD/Mimicker2D_IK2PD_Walk_Small.yaml --run-id=Mimicker2D_IK2PD_Walk_1 --num-areas=12
 	
+Mimicker2D_WalkRef_0: maximum DOF, Configured using Mimicker2D_Walk_Small.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 0, 0
+	mlagents-learn config/ppo/Mimicker2D_Walk_Small.yaml --run-id=Mimicker2D_WalkRef_0 --num-areas=12 --time-scale=100
+	Steps: 45 M ; Mean rewards: 
+	
 Mimicker2D_Rope_0: maximum DOF, Configured using Mimicker2D_Walk_Small.yaml;
 	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
 	mlagents-learn config/ppo/Mimicker2D_Walk_Small.yaml --run-id=Mimicker2D_Rope_0 --num-areas=12
