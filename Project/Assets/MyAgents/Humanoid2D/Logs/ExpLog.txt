@@ -24,5 +24,10 @@ Mimicker2D_Rope_2: maximum DOF, Configured using Mimicker2D_Walk_Small.yaml, Ini
 	
 Mimicker2D_Rope_3: maximum DOF, Configured using Mimicker2D_Walk_Small_FineTuning.yaml, Initialized from Mimicker2D_Rope_2
 	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 10, 0.1
-	mlagents-learn config/ppo/Mimicker2D_Walk_Small_FineTuning.yaml --run-id=Mimicker2D_Rope_2 --num-areas=12 --initialize-from=Mimicker2D_Rope_2
+	mlagents-learn config/ppo/Mimicker2D_Walk_Small_FineTuning.yaml --run-id=Mimicker2D_Rope_3 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_2
+	Steps: 13 M ; Mean rewards: 3850
 	
+Mimicker2D_Rope_4: maximum DOF, Configured using Mimicker2D_Walk_Small_FineTuning.yaml, Initialized from Mimicker2D_Rope_3
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 0, 0
+	mlagents-learn config/ppo/Mimicker2D_Walk_Small_FineTuning.yaml --run-id=Mimicker2D_Rope_4 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_3
+	Steps: 10 M ; Mean rewards: 3820

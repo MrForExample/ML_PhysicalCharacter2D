@@ -6569,8 +6569,8 @@ MonoBehaviour:
   handR: {fileID: 2412856545459057101}
   posFrequency: 0
   posDamping: 0
-  rotFrequency: 10
-  rotDamping: 0.1
+  rotFrequency: 0
+  rotDamping: 0
   footsLand:
   - {fileID: 0}
   - {fileID: 0}
