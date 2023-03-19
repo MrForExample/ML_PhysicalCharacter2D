@@ -1641,8 +1641,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1694963011587619242}
   m_LocalRotation: {x: -0, y: 0.70710725, z: -0, w: -0.7071064}
-  m_LocalPosition: {x: 450, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1000}
+  m_LocalPosition: {x: 450, y: -2, z: 0}
+  m_LocalScale: {x: 1, y: 5, z: 1000}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1694963010964671613}
@@ -4825,7 +4825,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   disableSpritesRender: 1
   agent2D: {fileID: 4280703788621242130}
-  maxAnimationLength: 1.083
+  maxAnimationLength: 0.583
   endEffectorPos: []
   footsLand: []
 --- !u!1 &4715530946912612252

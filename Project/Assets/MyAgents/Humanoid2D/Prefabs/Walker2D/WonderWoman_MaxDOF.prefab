@@ -2123,7 +2123,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &1590039664066309068
 ConfigurableJoint:
@@ -2140,12 +2140,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 1.9947044, y: 0.07204146, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -2501,13 +2501,13 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2625750944352687527}
   serializedVersion: 2
-  m_Mass: 8
+  m_Mass: 14
   m_Drag: 0.05
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &4377541876114407919
 ConfigurableJoint:
@@ -2524,12 +2524,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: -0.032748505, y: -0.3630662, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -2541,11 +2541,11 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -30
+    limit: -50
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 30
+    limit: 50
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
@@ -2915,7 +2915,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &6067924245856920746
 ConfigurableJoint:
@@ -2932,12 +2932,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 2.8288987, y: 0.026761653, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -3065,7 +3065,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &6739323920994692039
 ConfigurableJoint:
@@ -3082,12 +3082,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: -0.575, y: -0.021000385, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -3427,7 +3427,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &732544297823209846
 ConfigurableJoint:
@@ -3444,12 +3444,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 0.633, y: 0.05199957, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -3955,7 +3955,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &7728047247930431362
 ConfigurableJoint:
@@ -3972,12 +3972,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 2.0338218, y: -0.060901005, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -4215,7 +4215,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3706628095027281672}
   serializedVersion: 2
-  m_Mass: 8
+  m_Mass: 15
   m_Drag: 0.05
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -6251,7 +6251,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &5599008701482168989
 ConfigurableJoint:
@@ -6268,12 +6268,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 1.6186396, y: -0.026273128, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -6527,7 +6527,7 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 2
   m_BehaviorType: 0
-  m_BehaviorName: Walker
+  m_BehaviorName: Sprinter
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -6550,7 +6550,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 5000
   animatorReferencer: {fileID: 0}
-  m_TargetWalkingSpeed: 4
+  m_TargetWalkingSpeed: 9
   randomizeWalkSpeedEachEpisode: 0
   hips: {fileID: 1517816152728333938}
   spine: {fileID: 4833616355612419279}
@@ -6588,8 +6588,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b29724baddfa457da6eeab446fa49ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxJointSpring: 50000
-  jointDampen: 5000
+  maxJointSpring: 60000
+  jointDampen: 3000
   maxJointForceLimit: 30000
   bodyPartsList: []
 --- !u!114 &1225127674089910509
@@ -6604,7 +6604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
+  DecisionPeriod: 3
   TakeActionsBetweenDecisions: 0
 --- !u!114 &1225127674089910508
 MonoBehaviour:
@@ -7195,13 +7195,13 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6113635252236570436}
   serializedVersion: 2
-  m_Mass: 4
+  m_Mass: 5
   m_Drag: 10
   m_AngularDrag: 10
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &122164852964037924
 ConfigurableJoint:
@@ -7218,12 +7218,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 4.159411, y: -0.08001282, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -8415,7 +8415,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &7118735954764770642
 ConfigurableJoint:
@@ -8432,12 +8432,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 2.8046973, y: -0.822236, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -8889,7 +8889,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &5571035885573828574
 ConfigurableJoint:
@@ -8906,12 +8906,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 2.814371, y: 0.08128505, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -9155,7 +9155,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &7625579095864000452
 ConfigurableJoint:
@@ -9172,12 +9172,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 2.987209, y: -0.008776879, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -9336,7 +9336,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &4428046817249455378
 ConfigurableJoint:
@@ -9353,12 +9353,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 2.9575665, y: 0.9407642, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -9547,7 +9547,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &817225562869873830
 ConfigurableJoint:
@@ -9564,12 +9564,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 2.9666078, y: 0.013526472, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -10326,7 +10326,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 3
 --- !u!153 &3048131260570595804
 ConfigurableJoint:
@@ -10343,12 +10343,12 @@ ConfigurableJoint:
   m_ConnectedAnchor: {x: 1.516548, y: -0.023297263, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: -1, z: 0}
-  m_XMotion: 0
+  m_XMotion: 2
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0

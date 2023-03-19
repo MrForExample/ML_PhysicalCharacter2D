@@ -6,33 +6,198 @@ Mimic_Walk_16: Configured using Mimicker2D_Walk_Small.yaml; maximum DOF
 Mimicker2D_IK2PD_Walk_0: maximum DOF, miscalculated observation size...
 Mimicker2D_IK2PD_Walk_1: minimum DOF, Configured using IK2PD/Mimicker2D_IK2PD_Walk_Small.yaml
 	mlagents-learn config/ppo/IK2PD/Mimicker2D_IK2PD_Walk_Small.yaml --run-id=Mimicker2D_IK2PD_Walk_1 --num-areas=12
-	
+
+Bone_Body Angular X Limit: [-30, 30]
+maxJointSpring, jointDampen, maxJointForceLimit: 50000, 5000, 30000:
 Mimicker2D_WalkRef_0: maximum DOF, Configured using Mimicker2D_Walk_Small.yaml;
 	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 0, 0
 	mlagents-learn config/ppo/Mimicker2D_Walk_Small.yaml --run-id=Mimicker2D_WalkRef_0 --num-areas=12 --time-scale=100
-	Steps: 45 M ; Mean rewards: 
-	
+	Steps: 40 M ; Best Mean reward: 1960
+
 Mimicker2D_Rope_0: maximum DOF, Configured using Mimicker2D_Walk_Small.yaml;
 	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
 	mlagents-learn config/ppo/Mimicker2D_Walk_Small.yaml --run-id=Mimicker2D_Rope_0 --num-areas=12
-	Steps: 7 M; Mean rewards: 4400
+	Steps: 7 M; Best Mean reward: 4400
 	
 Mimicker2D_Rope_1: maximum DOF, Configured using Mimicker2D_Walk_Small_FineTuning.yaml, Initialized from Mimicker2D_Rope_0
 	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 30, 0.3
 	mlagents-learn config/ppo/Mimicker2D_Walk_Small_FineTuning.yaml --run-id=Mimicker2D_Rope_1 --num-areas=12 --initialize-from=Mimicker2D_Rope_0
-	Steps: 10 M ; Mean rewards: 4200
+	Steps: 10 M ; Best Mean reward: 4200
 	
 Mimicker2D_Rope_2: maximum DOF, Configured using Mimicker2D_Walk_Small.yaml, Initialized from Mimicker2D_Rope_1
 	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 15, 0.15
 	mlagents-learn config/ppo/Mimicker2D_Walk_Small.yaml --run-id=Mimicker2D_Rope_2 --num-areas=12 --initialize-from=Mimicker2D_Rope_1
-	Steps: 14 M ; Mean rewards: 3900
+	Steps: 14 M ; Best Mean reward: 3900
 	
 Mimicker2D_Rope_3: maximum DOF, Configured using Mimicker2D_Walk_Small_FineTuning.yaml, Initialized from Mimicker2D_Rope_2
 	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 10, 0.1
 	mlagents-learn config/ppo/Mimicker2D_Walk_Small_FineTuning.yaml --run-id=Mimicker2D_Rope_3 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_2
-	Steps: 13 M ; Mean rewards: 3850
+	Steps: 13 M ; Best Mean reward: 3850
 	
 Mimicker2D_Rope_4: maximum DOF, Configured using Mimicker2D_Walk_Small_FineTuning.yaml, Initialized from Mimicker2D_Rope_3
 	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 0, 0
 	mlagents-learn config/ppo/Mimicker2D_Walk_Small_FineTuning.yaml --run-id=Mimicker2D_Rope_4 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_3
-	Steps: 10 M ; Mean rewards: 3820
+	Steps: 10 M ; Best Mean reward: 3820
+	
+Mimicker2D_Rope_Sprint_Normal: maximum DOF, Configured using Mimicker2D_Sprint.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint.yaml --run-id=Mimicker2D_Rope_Sprint_Normal --num-areas=12 --time-scale=100
+	Steps: 2 M; Best Mean reward: 1840
+	
+Mimicker2D_Rope_Sprint_2Layer: maximum DOF, Configured using Mimicker2D_Sprint_2Layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_Rope_Sprint_2Layer --num-areas=12 --time-scale=100
+	Steps: 2 M; Best Mean reward: 1800
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_Rope_Sprint_2Layer_1 --num-areas=12
+	Steps: 1 M; Best Mean reward: 1720
+	
+Mimicker2D_Rope_Sprint_Big: maximum DOF, Configured using Mimicker2D_Sprint_Big.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_Big.yaml --run-id=Mimicker2D_Rope_Sprint_Big --num-areas=12 --time-scale=100
+	Steps: 1 M; Best Mean reward: 1700
+	
+Mimicker2D_Rope_Sprint_Big_2Layer: maximum DOF, Configured using Mimicker2D_Sprint_Big_2layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_Big_2layer.yaml --run-id=Mimicker2D_Rope_Sprint_Big_2Layer --num-areas=12 --time-scale=100
+	Steps: 1 M; Best Mean reward: 1635
+	
+Mimicker2D_Rope_Sprint_Small: maximum DOF, Configured using Mimicker2D_Sprint_Small.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_Small.yaml --run-id=Mimicker2D_Rope_Sprint_Small --num-areas=12 --time-scale=100
+	Steps: 1 M; Best Mean reward: 1620
+	
+Mimicker2D_Rope_Sprint_0_Toofast: maximum DOF, Configured using Mimicker2D_Sprint_2Layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_Rope_Sprint_0_Toofast --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_Sprint_2Layer
+	Steps: 15 M; Best Mean reward: 2048
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_Rope_Sprint_0_1_Toofast --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_Sprint_0_Toofast
+	
+Mimicker2D_Rope_Sprint_0: maximum DOF, Configured using Mimicker2D_Sprint_2Layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_Rope_Sprint_0 --num-areas=12 --time-scale=100
+	Steps: 20 M; Best Mean reward:2330
+	Problem: PD force is not strong enough?
+	
+maxJointSpring, jointDampen, maxJointForceLimit: 100000, 5000, 50000:
+Mimicker2D_Rope_Sprint_1: maximum DOF, Configured using Mimicker2D_Sprint_2Layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_Rope_Sprint_1 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_Sprint_0
+	Steps: 3 M; Best Mean reward: 2330
+
+maxJointSpring, jointDampen, maxJointForceLimit: 50000, 5000, 30000:
+Modify Sprint Animation:
+Mimicker2D_Rope_Sprint_2: maximum DOF, Configured using Mimicker2D_Sprint_2Layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_Rope_Sprint_2 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_Sprint_0
+	Steps: 10 M; Best Mean reward: 2330
+	Left foot angle is too wrong to be corrected
+	
+Mimicker2D_Rope_Sprint_3: maximum DOF, Configured using Mimicker2D_Sprint_2Layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_Rope_Sprint_3 --num-areas=12 --time-scale=100
+	Steps: 10 M; Best Mean reward: 2290
+	Now we talking :)
+	
+Mimicker2D_Rope_Sprint_4: maximum DOF, Configured using Mimicker2D_Sprint_2Layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_Rope_Sprint_4 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_Sprint_3
+	Steps: 10 M; Best Mean reward: 2525
+	
+Mimicker2D_Rope_Sprint_5: maximum DOF, Configured using Mimicker2D_Sprint_2Layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 30, 0.3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_Rope_Sprint_5 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_Sprint_4
+	Steps: 3.8 M; Best Mean reward: 2300
+	
+Mimicker2D_Rope_Sprint_6: maximum DOF, Configured using Mimicker2D_Sprint_2Layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 20, 0.2
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_Rope_Sprint_6 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_Sprint_5
+	Steps: 20 M; Best Mean reward: 2300
+	
+maxJointSpring, jointDampen, maxJointForceLimit: 60000, 3000, 30000:
+Mimicker2D_Rope_Sprint_7: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 40, 0.4
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_Rope_Sprint_7 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_Sprint_4
+	Steps: 15 M; Best Mean reward: 2455
+	
+Bone_Body Angular X Limit: [-50, 50]
+Mimicker2D_Rope_Sprint_8: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 40, 0.4
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_Rope_Sprint_8 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_Sprint_7
+	Steps: 5 M; Best Mean reward: 2765
+	
+Mimicker2D_Rope_Sprint_9: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 40, 0.4
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_Rope_Sprint_9 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_Sprint_8
+	Steps: 5 M; Best Mean reward: 2893
+	
+Mimicker2D_Rope_Sprint_10: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 25, 0.25
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_Rope_Sprint_10 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_Sprint_9
+	Steps: 5 M; Best Mean reward: 2720
+	Hips rotation is big due to body weight is too light compare to leg makes sprint animation is physically improbable
+	
+Bone_Hip mass = 15; Bone_Body mass = 14; Bone_Head mass = 5
+Mimicker2D_RopeSprint_0: maximum DOF, Configured using Mimicker2D_Sprint_2Layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_RopeSprint_0 --num-areas=12 --time-scale=100
+	Steps: 20 M; Best Mean reward: 2860
+	
+Mimicker2D_RopeSprint_1: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 300, 3, 300, 3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_RopeSprint_1 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_RopeSprint_0
+	Steps: 5 M; Best Mean reward: 2895
+	
+Mimicker2D_RopeSprint_2: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 40, 0.4
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_RopeSprint_2 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_RopeSprint_1
+	Steps: 5 M; Best Mean reward: 2860
+	
+Mimicker2D_RopeSprint_3: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 30, 0.3
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_RopeSprint_3 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_RopeSprint_2
+	Steps: 5 M; Best Mean reward: 2740
+	
+Mimicker2D_RopeSprint_4: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 25, 0.25
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_RopeSprint_4 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_RopeSprint_3
+	Steps: 5 M; Best Mean reward: 2635
+	
+Mimicker2D_RopeSprint_5: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 25, 0.25
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_RopeSprint_5 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_RopeSprint_4
+	Steps: 3 M; Best Mean reward: 2650
+	
+Mimicker2D_RopeSprint_6: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 20, 0.2
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_RopeSprint_6 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_RopeSprint_5
+	Steps: 5 M; Best Mean reward: 2530
+	
+Mimicker2D_RopeSprint_7: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 20, 0.2
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_RopeSprint_7 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_RopeSprint_6
+	Steps: 4 M; Best Mean reward: 2580
+	
+Mimicker2D_RopeSprint_8: maximum DOF, Configured using Mimicker2D_Sprint_2Layer.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 15, 0.15
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer.yaml --run-id=Mimicker2D_RopeSprint_8 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_RopeSprint_7
+	Steps: 20 M; Best Mean reward: 2530
+	
+Mimicker2D_RopeSprint_9: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 15, 0.15
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_RopeSprint_9 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_RopeSprint_8
+	Steps: 5 M; Best Mean reward: 2590
+	
+Mimicker2D_RopeSprint_10: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 10, 0.1
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_RopeSprint_10 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_RopeSprint_9
+	Steps: 10 M; Best Mean reward: 2585
+	
+Mimicker2D_RopeSprint_11: maximum DOF, Configured using Mimicker2D_Sprint_2Layer_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 0, 0
+	mlagents-learn config/ppo/Sprint/Mimicker2D_Sprint_2Layer_FineTuning.yaml --run-id=Mimicker2D_RopeSprint_11 --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_RopeSprint_10
+	Steps: 20 M; Best Mean reward: 2630
+	
+Mimicker2D_RopeWalk: maximum DOF, Configured using Mimicker2D_Walk_Small_FineTuning.yaml;
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 0, 0
+	mlagents-learn config/ppo/Mimicker2D_Walk_Small_FineTuning.yaml --run-id=Mimicker2D_RopeWalk --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_4
+	Steps: 25 M; Best Mean reward: 4000

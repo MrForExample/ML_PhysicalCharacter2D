@@ -136,7 +136,7 @@ namespace PhysicalCharacter2D
 
             ReferenceStateInitialization();
 
-            refLastPos = animatorReferencer.bodyReferencersDict[hips.name].bodyTransform.position.y;
+            refLastPos = animatorReferencer.bodyReferencersDict[hips.name].bodyLastPosition.y;
         }
         void ReferenceStateInitialization()
         {
@@ -273,7 +273,8 @@ namespace PhysicalCharacter2D
             float rg = CalculateTaskReward();
             AddReward(wi * ri + wg * rg);
 
-            RbPDFollowRef(animatorReferencer.bodyReferencersDict[hips.name].bodyTransform, m_JdController.bodyPartsDict[hips].rb, Time.fixedDeltaTime);
+            var refHips = animatorReferencer.bodyReferencersDict[hips.name];
+            RbPDFollowRef(refHips.bodyLastPosition.y, refHips.bodyLastQuaternion, m_JdController.bodyPartsDict[hips].rb, Time.fixedDeltaTime);
 
             animatorReferencer.RecordAllBodiesLastTarget();
         }
@@ -390,17 +391,17 @@ namespace PhysicalCharacter2D
             return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
         }
 
-        void RbPDFollowRef(Transform refObj, Rigidbody rb, float deltaTime)
+        void RbPDFollowRef(float refPosY, Quaternion refRotation, Rigidbody rb, float deltaTime)
         {
             // Vertical PD Follow
-            float targetPos = refObj.position.y;
+            float targetPos = refPosY;
             float targetVel = (targetPos - refLastPos) / deltaTime;
             float targetForce = CommonFunctions.CalculatePDForce1DStable(targetPos, targetVel, rb.position.y, rb.velocity.y, posFrequency, posDamping, deltaTime);
             rb.AddForce(new Vector3(0f, targetForce));
             refLastPos = targetPos;
 
             // Rotation PD Follow
-            Vector3 targetTorque = CommonFunctions.CalculatePDTorque(refObj.rotation, rb.transform.rotation, rb, rotFrequency, rotDamping, deltaTime);
+            Vector3 targetTorque = CommonFunctions.CalculatePDTorque(refRotation, rb.transform.rotation, rb, rotFrequency, rotDamping, deltaTime);
             rb.AddTorque(targetTorque);
         }
     }
