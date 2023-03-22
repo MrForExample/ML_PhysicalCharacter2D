@@ -201,3 +201,21 @@ Mimicker2D_RopeWalk: maximum DOF, Configured using Mimicker2D_Walk_Small_FineTun
 	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 0, 0
 	mlagents-learn config/ppo/Mimicker2D_Walk_Small_FineTuning.yaml --run-id=Mimicker2D_RopeWalk --num-areas=12 --time-scale=100 --initialize-from=Mimicker2D_Rope_4
 	Steps: 25 M; Best Mean reward: 4000
+	
+maxJointSpring, jointDampen, maxJointForceLimit: 50000, 5000, 20000:
+PDAgent_Walk_64Units_0: 
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 10, 1
+	mlagents-learn config/ppo/PDFeedback/PDFeedback_64Units.yaml --run-id=PDAgent_Walk_64Units_0 --num-areas=12 --time-scale=100
+	Steps: 8 M; Best Mean reward: 3220
+	
+PDAgent_Walk_64Units_1: 
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 0, 0
+	mlagents-learn config/ppo/PDFeedback/PDFeedback_64Units.yaml --run-id=PDAgent_Walk_64Units_1 --num-areas=12 --time-scale=100 --initialize-from=PDAgent_Walk_64Units_0
+	Steps: 10 M; Best Mean reward: 
+	
+PDAgent_Walk_64Units_New_0: 
+	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 0, 0
+	mlagents-learn config/ppo/PDFeedback/PDFeedback_64Units.yaml --run-id=PDAgent_Walk_64Units_New_0 --num-areas=12 --time-scale=100
+	Steps: 16 M; Best Mean reward: 3420
+	
+

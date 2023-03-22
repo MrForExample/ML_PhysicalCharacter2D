@@ -5,15 +5,14 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgentsExamples;
 using Unity.MLAgents.Sensors;
-using BodyPart = Unity.MLAgentsExamples.BodyPart;
 using Random = UnityEngine.Random;
 
 namespace PhysicalCharacter2D
 {
-    public class MimicAgent2D : Agent
+    public class MimicAgent2DPDFeedback : Agent
     {
         [Header("Reference motion")]
-        public AnimatorReferencer animatorReferencer;
+        public AnimatorReferencerPDFeedback animatorReferencer;
 
         [Header("Walk Speed")]
         [Range(0.1f, 10)]
@@ -68,13 +67,15 @@ namespace PhysicalCharacter2D
         //Because ragdolls can move erratically during training, using a stabilized reference transform improves learning
         OrientationCubeController m_OrientationCube;
         [HideInInspector]
-        public JointDriveController m_JdController;
+        public JointDriveControllerPDFeedback m_JdController;
         EnvironmentParameters m_ResetParams;
 
         DecisionRequester decisionRequester;
 
         [HideInInspector]
-        public BodyPart[] endEffectors;
+        public BodyPartPDFeedback[] endEffectors;
+        [HideInInspector]
+        public List<BodyPartPDFeedback> allBodiesButHips = new List<BodyPartPDFeedback>();
         float totalMass;
 
         public override void Initialize()
@@ -83,7 +84,7 @@ namespace PhysicalCharacter2D
             decisionRequester = GetComponentInChildren<DecisionRequester>();
 
             //Setup each body part
-            m_JdController = GetComponent<JointDriveController>();
+            m_JdController = GetComponent<JointDriveControllerPDFeedback>();
             m_JdController.SetupBodyPart(hips);
             m_JdController.SetupBodyPart(spine);
             m_JdController.SetupBodyPart(head);
@@ -106,7 +107,7 @@ namespace PhysicalCharacter2D
 
             m_ResetParams = Academy.Instance.EnvironmentParameters;
 
-            endEffectors = new BodyPart[5]{m_JdController.bodyPartsDict[handL], 
+            endEffectors = new BodyPartPDFeedback[5]{m_JdController.bodyPartsDict[handL], 
                                         m_JdController.bodyPartsDict[handR], 
                                         m_JdController.bodyPartsDict[footL], 
                                         m_JdController.bodyPartsDict[footR],
@@ -114,7 +115,13 @@ namespace PhysicalCharacter2D
 
             totalMass = 0f;
             foreach (var bp in m_JdController.bodyPartsDict.Values)
+            {
+                if (bp.rb.name != hips.name)
+                    allBodiesButHips.Add(bp);
+
                 totalMass += bp.rb.mass;
+            }
+                
         }
 
         /// <summary>
@@ -156,12 +163,14 @@ namespace PhysicalCharacter2D
         /// <summary>
         /// Add relevant information on each body part to observations.
         /// </summary>
-        public void CollectObservationBodyPart(BodyPart bp, VectorSensor sensor)
+        public void CollectObservationBodyPart(BodyPartPDFeedback bp, VectorSensor sensor)
         {
             // Reference motion
             var refBp = animatorReferencer.bodyReferencersDict[bp.rb.name];
-            sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(CommonFunctions.CalculateAngularVelocity(refBp.bodyLastQuaternion, refBp.bodyTransform.rotation, Time.fixedDeltaTime * decisionRequester.DecisionPeriod)));
-            sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(refBp.bodyLastQuaternion, m_OrientationCube.transform.rotation));
+            Vector3 refAngularVelocity = CommonFunctions.CalculateAngularVelocity(refBp.bodyLastQuaternion, refBp.bodyTransform.rotation, Time.fixedDeltaTime * decisionRequester.DecisionPeriod);
+            sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(refAngularVelocity - bp.rb.angularVelocity));
+            //sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(m_OrientationCube.transform.rotation, refBp.bodyLastQuaternion));
+            sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(bp.rb.transform.localRotation, refBp.bodyLastLocalQuaternion));
 
             //Ground Check
             sensor.AddObservation(bp.groundContact.touchingGround); // Is this bp touching the ground
@@ -171,7 +180,7 @@ namespace PhysicalCharacter2D
             sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.velocity));
             sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.angularVelocity));
 
-            //sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(bp.rb.rotation, m_OrientationCube.transform.rotation));
+            //sensor.AddObservation(CommonFunctions.CalculateLocalQuaternion(m_OrientationCube.transform.rotation, bp.rb.rotation));
             sensor.AddObservation(bp.rb.transform.localRotation);
             // state size: 18
 
@@ -228,20 +237,20 @@ namespace PhysicalCharacter2D
             var i = -1;
 
             var continuousActions = actionBuffers.ContinuousActions;
-            bpDict[spine].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[spine].AddJointTargetRotation(continuousActions[++i]);
 
-            bpDict[thighL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-            bpDict[thighR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-            bpDict[shinL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-            bpDict[shinR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-            bpDict[footR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-            bpDict[footL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[thighL].AddJointTargetRotation(continuousActions[++i]);
+            bpDict[thighR].AddJointTargetRotation(continuousActions[++i]);
+            bpDict[shinL].AddJointTargetRotation(continuousActions[++i]);
+            bpDict[shinR].AddJointTargetRotation(continuousActions[++i]);
+            bpDict[footR].AddJointTargetRotation(continuousActions[++i]);
+            bpDict[footL].AddJointTargetRotation(continuousActions[++i]);
 
-            bpDict[armL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-            bpDict[armR].SetJointTargetRotation(continuousActions[++i], 0f, 0);
-            bpDict[forearmL].SetJointTargetRotation(continuousActions[++i], 0, 0);
-            bpDict[forearmR].SetJointTargetRotation(continuousActions[++i], 0, 0);
-            bpDict[head].SetJointTargetRotation(continuousActions[++i], 0f, 0);
+            bpDict[armL].AddJointTargetRotation(continuousActions[++i]);
+            bpDict[armR].AddJointTargetRotation(continuousActions[++i]);
+            bpDict[forearmL].AddJointTargetRotation(continuousActions[++i]);
+            bpDict[forearmR].AddJointTargetRotation(continuousActions[++i]);
+            bpDict[head].AddJointTargetRotation(continuousActions[++i]);
 
             //update joint strength settings
             bpDict[spine].SetJointStrength(continuousActions[++i]);
@@ -267,14 +276,18 @@ namespace PhysicalCharacter2D
         float wi = 0.7f, wg = 0.3f;
         void FixedUpdate()
         {
+            float deltaTime = Time.fixedDeltaTime;
+
             UpdateOrientationObjects();
 
             float ri = CalculateImitationReward();
             float rg = CalculateTaskReward();
             AddReward(wi * ri + wg * rg);
 
+            AllRbPDFollowRefButHips(deltaTime);
+
             var refHips = animatorReferencer.bodyReferencersDict[hips.name];
-            HipsRbPDFollowRef(refHips.bodyLastPosition.y, refHips.bodyLastQuaternion, m_JdController.bodyPartsDict[hips].rb, Time.fixedDeltaTime);
+            HipsRbPDFollowRef(refHips.bodyLastPosition.y, refHips.bodyLastQuaternion, m_JdController.bodyPartsDict[hips].rb, deltaTime);
 
             animatorReferencer.RecordAllBodiesLastTarget();
         }
@@ -389,6 +402,14 @@ namespace PhysicalCharacter2D
             //return the value on a declining sigmoid shaped curve that decays from 1 to 0
             //This reward will approach 1 if it matches perfectly and approach zero as it deviates
             return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
+        }
+
+        void AllRbPDFollowRefButHips(float deltaTime)
+        {
+            foreach (var bp in allBodiesButHips)
+            {
+                bp.SetJointPDTarget(animatorReferencer.bodyReferencersDict[bp.rb.name].bodyLastLocalQuaternion, deltaTime);
+            }
         }
 
         void HipsRbPDFollowRef(float refPosY, Quaternion refRotation, Rigidbody rb, float deltaTime)
