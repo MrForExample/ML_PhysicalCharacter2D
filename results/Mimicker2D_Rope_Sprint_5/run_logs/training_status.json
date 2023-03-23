@@ -1,0 +1,56 @@
+{
+    "Sprinter": {
+        "checkpoints": [
+            {
+                "steps": 999341,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_5\\Sprinter\\Sprinter-999341.onnx",
+                "reward": 2214.9617919921875,
+                "creation_time": 1678917181.2823477,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_5\\Sprinter\\Sprinter-999341.pt"
+                ]
+            },
+            {
+                "steps": 1999337,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_5\\Sprinter\\Sprinter-1999337.onnx",
+                "reward": 2269.9452958540483,
+                "creation_time": 1678918595.6903412,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_5\\Sprinter\\Sprinter-1999337.pt"
+                ]
+            },
+            {
+                "steps": 2999334,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_5\\Sprinter\\Sprinter-2999334.onnx",
+                "reward": 2285.7651311700993,
+                "creation_time": 1678919972.5174136,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_5\\Sprinter\\Sprinter-2999334.pt"
+                ]
+            },
+            {
+                "steps": 3800004,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_5\\Sprinter\\Sprinter-3800004.onnx",
+                "reward": 2305.615519205729,
+                "creation_time": 1678921084.3377316,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_5\\Sprinter\\Sprinter-3800004.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3800004,
+            "file_path": "results\\Mimicker2D_Rope_Sprint_5\\Sprinter.onnx",
+            "reward": 2305.615519205729,
+            "creation_time": 1678921084.3377316,
+            "auxillary_file_paths": [
+                "results\\Mimicker2D_Rope_Sprint_5\\Sprinter\\Sprinter-3800004.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}

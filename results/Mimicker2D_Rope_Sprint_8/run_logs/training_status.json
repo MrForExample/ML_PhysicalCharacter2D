@@ -1,0 +1,74 @@
+{
+    "Sprinter": {
+        "checkpoints": [
+            {
+                "steps": 999495,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-999495.onnx",
+                "reward": 2568.8334147135415,
+                "creation_time": 1678963354.5344107,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-999495.pt"
+                ]
+            },
+            {
+                "steps": 1999492,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-1999492.onnx",
+                "reward": null,
+                "creation_time": 1678964634.5424316,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-1999492.pt"
+                ]
+            },
+            {
+                "steps": 2999490,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-2999490.onnx",
+                "reward": 2669.487503051758,
+                "creation_time": 1678965907.9502177,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-2999490.pt"
+                ]
+            },
+            {
+                "steps": 3999495,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-3999495.onnx",
+                "reward": 2755.6162923177085,
+                "creation_time": 1678967188.2235906,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-3999495.pt"
+                ]
+            },
+            {
+                "steps": 4999492,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-4999492.onnx",
+                "reward": null,
+                "creation_time": 1678968472.0100687,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-4999492.pt"
+                ]
+            },
+            {
+                "steps": 5000158,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-5000158.onnx",
+                "reward": 2782.6605224609375,
+                "creation_time": 1678968472.1239266,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-5000158.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 5000158,
+            "file_path": "results\\Mimicker2D_Rope_Sprint_8\\Sprinter.onnx",
+            "reward": 2782.6605224609375,
+            "creation_time": 1678968472.1239266,
+            "auxillary_file_paths": [
+                "results\\Mimicker2D_Rope_Sprint_8\\Sprinter\\Sprinter-5000158.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}

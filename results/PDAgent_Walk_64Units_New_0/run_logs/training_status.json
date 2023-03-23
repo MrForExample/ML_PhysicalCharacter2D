@@ -1,0 +1,209 @@
+{
+    "PDAgent": {
+        "checkpoints": [
+            {
+                "steps": 999801,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-999801.onnx",
+                "reward": 1055.1580810546875,
+                "creation_time": 1679354609.403856,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-999801.pt"
+                ]
+            },
+            {
+                "steps": 1999499,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-1999499.onnx",
+                "reward": 2103.0435384114585,
+                "creation_time": 1679356002.8089774,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-1999499.pt"
+                ]
+            },
+            {
+                "steps": 2999570,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-2999570.onnx",
+                "reward": 2658.609033203125,
+                "creation_time": 1679357400.5637534,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-2999570.pt"
+                ]
+            },
+            {
+                "steps": 3999821,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-3999821.onnx",
+                "reward": 2857.561248779297,
+                "creation_time": 1679358801.139392,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-3999821.pt"
+                ]
+            },
+            {
+                "steps": 4999640,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-4999640.onnx",
+                "reward": 2969.29736328125,
+                "creation_time": 1679360201.4919155,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-4999640.pt"
+                ]
+            },
+            {
+                "steps": 5999707,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-5999707.onnx",
+                "reward": 3091.3948669433594,
+                "creation_time": 1679361600.1113787,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-5999707.pt"
+                ]
+            },
+            {
+                "steps": 6999864,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-6999864.onnx",
+                "reward": 3168.3204650878906,
+                "creation_time": 1679362999.5524836,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-6999864.pt"
+                ]
+            },
+            {
+                "steps": 7999863,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-7999863.onnx",
+                "reward": 3264.5596313476562,
+                "creation_time": 1679364397.314486,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-7999863.pt"
+                ]
+            },
+            {
+                "steps": 8999862,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-8999862.onnx",
+                "reward": 3320.9357299804688,
+                "creation_time": 1679365794.0684829,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-8999862.pt"
+                ]
+            },
+            {
+                "steps": 9999864,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-9999864.onnx",
+                "reward": 3349.404510498047,
+                "creation_time": 1679367191.4686737,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-9999864.pt"
+                ]
+            },
+            {
+                "steps": 10999863,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-10999863.onnx",
+                "reward": 3411.5899353027344,
+                "creation_time": 1679368591.8488245,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-10999863.pt"
+                ]
+            },
+            {
+                "steps": 11999862,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-11999862.onnx",
+                "reward": 3386.7233276367188,
+                "creation_time": 1679369992.3562498,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-11999862.pt"
+                ]
+            },
+            {
+                "steps": 12999864,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-12999864.onnx",
+                "reward": 3410.9130859375,
+                "creation_time": 1679371392.3582342,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-12999864.pt"
+                ]
+            },
+            {
+                "steps": 13999863,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-13999863.onnx",
+                "reward": 3444.679229736328,
+                "creation_time": 1679372791.0147674,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-13999863.pt"
+                ]
+            },
+            {
+                "steps": 14999862,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-14999862.onnx",
+                "reward": 3473.9668579101562,
+                "creation_time": 1679374189.7289946,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-14999862.pt"
+                ]
+            },
+            {
+                "steps": 15999864,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-15999864.onnx",
+                "reward": 3481.2573852539062,
+                "creation_time": 1679375587.7096035,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-15999864.pt"
+                ]
+            },
+            {
+                "steps": 16999673,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-16999673.onnx",
+                "reward": 3478.697265625,
+                "creation_time": 1679376981.532495,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-16999673.pt"
+                ]
+            },
+            {
+                "steps": 17999594,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-17999594.onnx",
+                "reward": 3488.9769287109375,
+                "creation_time": 1679378381.9707322,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-17999594.pt"
+                ]
+            },
+            {
+                "steps": 18999400,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-18999400.onnx",
+                "reward": 3456.9012247721353,
+                "creation_time": 1679379779.8037276,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-18999400.pt"
+                ]
+            },
+            {
+                "steps": 19999959,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-19999959.onnx",
+                "reward": 3473.08388671875,
+                "creation_time": 1679381180.3582337,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-19999959.pt"
+                ]
+            },
+            {
+                "steps": 20000625,
+                "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-20000625.onnx",
+                "reward": 3471.27294921875,
+                "creation_time": 1679381180.473272,
+                "auxillary_file_paths": [
+                    "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-20000625.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 20000625,
+            "file_path": "results\\PDAgent_Walk_64Units_New_0\\PDAgent.onnx",
+            "reward": 3471.27294921875,
+            "creation_time": 1679381180.473272,
+            "auxillary_file_paths": [
+                "results\\PDAgent_Walk_64Units_New_0\\PDAgent\\PDAgent-20000625.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}

@@ -1,0 +1,65 @@
+{
+    "Runner": {
+        "checkpoints": [
+            {
+                "steps": 1499652,
+                "file_path": "results\\Mimicker2D_Run_0\\Runner\\Runner-1499652.onnx",
+                "reward": 1414.5968831380208,
+                "creation_time": 1677698674.5117478,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Run_0\\Runner\\Runner-1499652.pt"
+                ]
+            },
+            {
+                "steps": 1999839,
+                "file_path": "results\\Mimicker2D_Run_0\\Runner\\Runner-1999839.onnx",
+                "reward": null,
+                "creation_time": 1677699431.2075138,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Run_0\\Runner\\Runner-1999839.pt"
+                ]
+            },
+            {
+                "steps": 2499982,
+                "file_path": "results\\Mimicker2D_Run_0\\Runner\\Runner-2499982.onnx",
+                "reward": 1689.0972900390625,
+                "creation_time": 1677700236.3974009,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Run_0\\Runner\\Runner-2499982.pt"
+                ]
+            },
+            {
+                "steps": 2999915,
+                "file_path": "results\\Mimicker2D_Run_0\\Runner\\Runner-2999915.onnx",
+                "reward": null,
+                "creation_time": 1677701072.5257406,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Run_0\\Runner\\Runner-2999915.pt"
+                ]
+            },
+            {
+                "steps": 3330315,
+                "file_path": "results\\Mimicker2D_Run_0\\Runner\\Runner-3330315.onnx",
+                "reward": 1827.7884521484375,
+                "creation_time": 1677701617.8340025,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Run_0\\Runner\\Runner-3330315.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3330315,
+            "file_path": "results\\Mimicker2D_Run_0\\Runner.onnx",
+            "reward": 1827.7884521484375,
+            "creation_time": 1677701617.8340025,
+            "auxillary_file_paths": [
+                "results\\Mimicker2D_Run_0\\Runner\\Runner-3330315.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}

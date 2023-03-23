@@ -1,0 +1,110 @@
+{
+    "Walker": {
+        "checkpoints": [
+            {
+                "steps": 1999000,
+                "file_path": "results\\Mimicker2D_Rope_1\\Walker\\Walker-1999000.onnx",
+                "reward": 3857.575997488839,
+                "creation_time": 1678616606.445796,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_1\\Walker\\Walker-1999000.pt"
+                ]
+            },
+            {
+                "steps": 2999000,
+                "file_path": "results\\Mimicker2D_Rope_1\\Walker\\Walker-2999000.onnx",
+                "reward": 3975.314386541193,
+                "creation_time": 1678618287.8888988,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_1\\Walker\\Walker-2999000.pt"
+                ]
+            },
+            {
+                "steps": 3999000,
+                "file_path": "results\\Mimicker2D_Rope_1\\Walker\\Walker-3999000.onnx",
+                "reward": 4055.5564778645835,
+                "creation_time": 1678619958.838821,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_1\\Walker\\Walker-3999000.pt"
+                ]
+            },
+            {
+                "steps": 4999000,
+                "file_path": "results\\Mimicker2D_Rope_1\\Walker\\Walker-4999000.onnx",
+                "reward": 4108.018519810268,
+                "creation_time": 1678621641.7891614,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_1\\Walker\\Walker-4999000.pt"
+                ]
+            },
+            {
+                "steps": 5999000,
+                "file_path": "results\\Mimicker2D_Rope_1\\Walker\\Walker-5999000.onnx",
+                "reward": 4148.910777698864,
+                "creation_time": 1678623270.3875062,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_1\\Walker\\Walker-5999000.pt"
+                ]
+            },
+            {
+                "steps": 6999000,
+                "file_path": "results\\Mimicker2D_Rope_1\\Walker\\Walker-6999000.onnx",
+                "reward": 4199.498697916667,
+                "creation_time": 1678624925.751482,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_1\\Walker\\Walker-6999000.pt"
+                ]
+            },
+            {
+                "steps": 7999000,
+                "file_path": "results\\Mimicker2D_Rope_1\\Walker\\Walker-7999000.onnx",
+                "reward": 4224.373883928572,
+                "creation_time": 1678626757.5516634,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_1\\Walker\\Walker-7999000.pt"
+                ]
+            },
+            {
+                "steps": 8999000,
+                "file_path": "results\\Mimicker2D_Rope_1\\Walker\\Walker-8999000.onnx",
+                "reward": 4244.163618607955,
+                "creation_time": 1678628640.822907,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_1\\Walker\\Walker-8999000.pt"
+                ]
+            },
+            {
+                "steps": 9999000,
+                "file_path": "results\\Mimicker2D_Rope_1\\Walker\\Walker-9999000.onnx",
+                "reward": 4248.469563802083,
+                "creation_time": 1678630408.862497,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_1\\Walker\\Walker-9999000.pt"
+                ]
+            },
+            {
+                "steps": 10008000,
+                "file_path": "results\\Mimicker2D_Rope_1\\Walker\\Walker-10008000.onnx",
+                "reward": 4253.0577392578125,
+                "creation_time": 1678630409.4532359,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_1\\Walker\\Walker-10008000.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 10008000,
+            "file_path": "results\\Mimicker2D_Rope_1\\Walker.onnx",
+            "reward": 4253.0577392578125,
+            "creation_time": 1678630409.4532359,
+            "auxillary_file_paths": [
+                "results\\Mimicker2D_Rope_1\\Walker\\Walker-10008000.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}

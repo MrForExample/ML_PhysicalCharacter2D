@@ -1,0 +1,38 @@
+{
+    "IK2PDAgent": {
+        "checkpoints": [
+            {
+                "steps": 999961,
+                "file_path": "results\\Mimicker2D_IK2PD_Walk_1\\IK2PDAgent\\IK2PDAgent-999961.onnx",
+                "reward": 36.63513744578642,
+                "creation_time": 1678529840.8338602,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_IK2PD_Walk_1\\IK2PDAgent\\IK2PDAgent-999961.pt"
+                ]
+            },
+            {
+                "steps": 1657684,
+                "file_path": "results\\Mimicker2D_IK2PD_Walk_1\\IK2PDAgent\\IK2PDAgent-1657684.onnx",
+                "reward": 60.43768262863159,
+                "creation_time": 1678531228.0432475,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_IK2PD_Walk_1\\IK2PDAgent\\IK2PDAgent-1657684.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1657684,
+            "file_path": "results\\Mimicker2D_IK2PD_Walk_1\\IK2PDAgent.onnx",
+            "reward": 60.43768262863159,
+            "creation_time": 1678531228.0432475,
+            "auxillary_file_paths": [
+                "results\\Mimicker2D_IK2PD_Walk_1\\IK2PDAgent\\IK2PDAgent-1657684.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "Sprinter": {
+        "checkpoints": [
+            {
+                "steps": 999086,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_2Layer_1\\Sprinter\\Sprinter-999086.onnx",
+                "reward": 1683.4740600585938,
+                "creation_time": 1678803678.8308926,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_2Layer_1\\Sprinter\\Sprinter-999086.pt"
+                ]
+            },
+            {
+                "steps": 1007086,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_2Layer_1\\Sprinter\\Sprinter-1007086.onnx",
+                "reward": 1714.9067891438801,
+                "creation_time": 1678803679.3169398,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_2Layer_1\\Sprinter\\Sprinter-1007086.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1007086,
+            "file_path": "results\\Mimicker2D_Rope_Sprint_2Layer_1\\Sprinter.onnx",
+            "reward": 1714.9067891438801,
+            "creation_time": 1678803679.3169398,
+            "auxillary_file_paths": [
+                "results\\Mimicker2D_Rope_Sprint_2Layer_1\\Sprinter\\Sprinter-1007086.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}

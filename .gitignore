@@ -2,7 +2,7 @@
 /models
 /summaries
 # Output Artifacts
-/results
+# /results
 # Output Builds
 /Builds
 

@@ -1,0 +1,65 @@
+{
+    "IK2PDAgent": {
+        "checkpoints": [
+            {
+                "steps": 26499841,
+                "file_path": "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent\\IK2PDAgent-26499841.onnx",
+                "reward": 253.61616243634904,
+                "creation_time": 1678455095.5886083,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent\\IK2PDAgent-26499841.pt"
+                ]
+            },
+            {
+                "steps": 26999644,
+                "file_path": "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent\\IK2PDAgent-26999644.onnx",
+                "reward": 105.00259017944336,
+                "creation_time": 1678456027.8562684,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent\\IK2PDAgent-26999644.pt"
+                ]
+            },
+            {
+                "steps": 27499637,
+                "file_path": "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent\\IK2PDAgent-27499637.onnx",
+                "reward": 152.55556646982828,
+                "creation_time": 1678457109.482082,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent\\IK2PDAgent-27499637.pt"
+                ]
+            },
+            {
+                "steps": 27999917,
+                "file_path": "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent\\IK2PDAgent-27999917.onnx",
+                "reward": 176.0201771259308,
+                "creation_time": 1678458345.7576501,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent\\IK2PDAgent-27999917.pt"
+                ]
+            },
+            {
+                "steps": 28197152,
+                "file_path": "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent\\IK2PDAgent-28197152.onnx",
+                "reward": 138.08874324651865,
+                "creation_time": 1678458735.8011355,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent\\IK2PDAgent-28197152.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 28197152,
+            "file_path": "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent.onnx",
+            "reward": 138.08874324651865,
+            "creation_time": 1678458735.8011355,
+            "auxillary_file_paths": [
+                "results\\Mimicker2D_IK2PD_Walk_0\\IK2PDAgent\\IK2PDAgent-28197152.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}

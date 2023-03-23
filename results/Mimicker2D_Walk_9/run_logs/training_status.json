@@ -1,0 +1,65 @@
+{
+    "Walker": {
+        "checkpoints": [
+            {
+                "steps": 3499681,
+                "file_path": "results\\Mimicker2D_Walk_9\\Walker\\Walker-3499681.onnx",
+                "reward": 3635.8707682291665,
+                "creation_time": 1677448553.7478752,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Walk_9\\Walker\\Walker-3499681.pt"
+                ]
+            },
+            {
+                "steps": 3999383,
+                "file_path": "results\\Mimicker2D_Walk_9\\Walker\\Walker-3999383.onnx",
+                "reward": 3658.2572631835938,
+                "creation_time": 1677449283.0717342,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Walk_9\\Walker\\Walker-3999383.pt"
+                ]
+            },
+            {
+                "steps": 4499383,
+                "file_path": "results\\Mimicker2D_Walk_9\\Walker\\Walker-4499383.onnx",
+                "reward": 3673.77001953125,
+                "creation_time": 1677450014.5826178,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Walk_9\\Walker\\Walker-4499383.pt"
+                ]
+            },
+            {
+                "steps": 4999383,
+                "file_path": "results\\Mimicker2D_Walk_9\\Walker\\Walker-4999383.onnx",
+                "reward": 3674.351388113839,
+                "creation_time": 1677450742.1311789,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Walk_9\\Walker\\Walker-4999383.pt"
+                ]
+            },
+            {
+                "steps": 5000383,
+                "file_path": "results\\Mimicker2D_Walk_9\\Walker\\Walker-5000383.onnx",
+                "reward": 3673.6544189453125,
+                "creation_time": 1677450742.2781794,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Walk_9\\Walker\\Walker-5000383.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 5000383,
+            "file_path": "results\\Mimicker2D_Walk_9\\Walker.onnx",
+            "reward": 3673.6544189453125,
+            "creation_time": 1677450742.2781794,
+            "auxillary_file_paths": [
+                "results\\Mimicker2D_Walk_9\\Walker\\Walker-5000383.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}

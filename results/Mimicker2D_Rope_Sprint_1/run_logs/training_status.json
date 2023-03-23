@@ -1,0 +1,56 @@
+{
+    "Sprinter": {
+        "checkpoints": [
+            {
+                "steps": 999341,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_1\\Sprinter\\Sprinter-999341.onnx",
+                "reward": 2191.1173983487215,
+                "creation_time": 1678867789.31409,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_1\\Sprinter\\Sprinter-999341.pt"
+                ]
+            },
+            {
+                "steps": 1999337,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_1\\Sprinter\\Sprinter-1999337.onnx",
+                "reward": 2310.1223588423295,
+                "creation_time": 1678869129.3212771,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_1\\Sprinter\\Sprinter-1999337.pt"
+                ]
+            },
+            {
+                "steps": 2999334,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_1\\Sprinter\\Sprinter-2999334.onnx",
+                "reward": 2330.8762040571733,
+                "creation_time": 1678870495.2816234,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_1\\Sprinter\\Sprinter-2999334.pt"
+                ]
+            },
+            {
+                "steps": 3052008,
+                "file_path": "results\\Mimicker2D_Rope_Sprint_1\\Sprinter\\Sprinter-3052008.onnx",
+                "reward": null,
+                "creation_time": 1678870566.2361205,
+                "auxillary_file_paths": [
+                    "results\\Mimicker2D_Rope_Sprint_1\\Sprinter\\Sprinter-3052008.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3052008,
+            "file_path": "results\\Mimicker2D_Rope_Sprint_1\\Sprinter.onnx",
+            "reward": null,
+            "creation_time": 1678870566.2361205,
+            "auxillary_file_paths": [
+                "results\\Mimicker2D_Rope_Sprint_1\\Sprinter\\Sprinter-3052008.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}
