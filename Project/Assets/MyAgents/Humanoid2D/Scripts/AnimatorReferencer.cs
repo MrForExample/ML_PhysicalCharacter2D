@@ -6,6 +6,7 @@ namespace PhysicalCharacter2D
 {
     public class AnimatorReferencer : MonoBehaviour
     {
+        public bool disableRefSpritesRender = true;
         public bool disableSpritesRender = false;
         public MimicAgent2D agent2D;
         Animator animator;
@@ -68,16 +69,18 @@ namespace PhysicalCharacter2D
 
             hips = bodyReferencersDict[agent2D.hips.name];
 
-            if (disableSpritesRender)
+            if (disableRefSpritesRender)
             {
-                var allSprites = transform.GetComponentsInChildren<SpriteRenderer>(true);
-                foreach (var sr in allSprites)
+                var allRefSprites = transform.GetComponentsInChildren<SpriteRenderer>(true);
+                foreach (var sr in allRefSprites)
                 {
                     sr.enabled = false;
                     sr.gameObject.SetActive(false);
                 }
-
-                allSprites = agent2D.GetComponentsInChildren<SpriteRenderer>(true);
+            }
+            if (disableSpritesRender)
+            {         
+                var allSprites = agent2D.GetComponentsInChildren<SpriteRenderer>(true);
                 foreach (var sr in allSprites)
                 {
                     sr.enabled = false;

@@ -211,7 +211,7 @@ PDAgent_Walk_64Units_0:
 PDAgent_Walk_64Units_1: 
 	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 0, 0
 	mlagents-learn config/ppo/PDFeedback/PDFeedback_64Units.yaml --run-id=PDAgent_Walk_64Units_1 --num-areas=12 --time-scale=100 --initialize-from=PDAgent_Walk_64Units_0
-	Steps: 10 M; Best Mean reward: 
+	Steps: 6 M; Best Mean reward: 3350
 	
 PDAgent_Walk_64Units_New_0: 
 	posFrequency, posDamping, rotFrequency, rotDamping: 0, 0, 0, 0

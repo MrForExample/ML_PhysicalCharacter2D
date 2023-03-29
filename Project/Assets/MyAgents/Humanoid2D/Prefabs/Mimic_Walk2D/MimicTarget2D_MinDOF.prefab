@@ -718,7 +718,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd647111702da9a45b1bccb244983c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableSpritesRender: 1
+  disableRefSpritesRender: 1
+  disableSpritesRender: 0
   agent2D: {fileID: 8296854384857544112}
   maxAnimationLength: 1.083
   endEffectorPos: []
@@ -9519,6 +9520,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5257784559632527188, guid: ace729717be20324393581ab2cccdfcc,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: d22ce72315fde734bbc061bf5a34ff96,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ace729717be20324393581ab2cccdfcc, type: 3}
 --- !u!4 &3372648308281435627 stripped
