@@ -135,6 +135,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2D_Walk_MaxDOF_2
       objectReference: {fileID: 0}
+    - target: {fileID: 2606139233621847716, guid: ddbdb251e8365de4e98dbc81d538f1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2606139233621847717, guid: ddbdb251e8365de4e98dbc81d538f1e5,
         type: 3}
       propertyPath: m_RootOrder
@@ -203,6 +208,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MimicTarget2D_Walk_MaxDOF_11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606139233621847716, guid: ddbdb251e8365de4e98dbc81d538f1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2606139233621847717, guid: ddbdb251e8365de4e98dbc81d538f1e5,
         type: 3}
@@ -273,6 +283,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2D_Walk_MaxDOF_1
       objectReference: {fileID: 0}
+    - target: {fileID: 2606139233621847716, guid: ddbdb251e8365de4e98dbc81d538f1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2606139233621847717, guid: ddbdb251e8365de4e98dbc81d538f1e5,
         type: 3}
       propertyPath: m_RootOrder
@@ -341,6 +356,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MimicTarget2D_Walk_MaxDOF_5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606139233621847716, guid: ddbdb251e8365de4e98dbc81d538f1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2606139233621847717, guid: ddbdb251e8365de4e98dbc81d538f1e5,
         type: 3}
@@ -504,6 +524,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MimicTarget2D_Walk_MaxDOF_4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606139233621847716, guid: ddbdb251e8365de4e98dbc81d538f1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2606139233621847717, guid: ddbdb251e8365de4e98dbc81d538f1e5,
         type: 3}
@@ -868,6 +893,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2D_Walk_MaxDOF_7
       objectReference: {fileID: 0}
+    - target: {fileID: 2606139233621847716, guid: ddbdb251e8365de4e98dbc81d538f1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2606139233621847717, guid: ddbdb251e8365de4e98dbc81d538f1e5,
         type: 3}
       propertyPath: m_RootOrder
@@ -943,6 +973,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2D_Walk_MaxDOF_10
       objectReference: {fileID: 0}
+    - target: {fileID: 2606139233621847716, guid: ddbdb251e8365de4e98dbc81d538f1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2606139233621847717, guid: ddbdb251e8365de4e98dbc81d538f1e5,
         type: 3}
       propertyPath: m_RootOrder
@@ -1011,6 +1046,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MimicTarget2D_Walk_MaxDOF_6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606139233621847716, guid: ddbdb251e8365de4e98dbc81d538f1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2606139233621847717, guid: ddbdb251e8365de4e98dbc81d538f1e5,
         type: 3}
@@ -1149,6 +1189,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MimicTarget2D_Walk_MaxDOF_9
       objectReference: {fileID: 0}
+    - target: {fileID: 2606139233621847716, guid: ddbdb251e8365de4e98dbc81d538f1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2606139233621847717, guid: ddbdb251e8365de4e98dbc81d538f1e5,
         type: 3}
       propertyPath: m_RootOrder
@@ -1217,6 +1262,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MimicTarget2D_Walk_MaxDOF_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606139233621847716, guid: ddbdb251e8365de4e98dbc81d538f1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2606139233621847717, guid: ddbdb251e8365de4e98dbc81d538f1e5,
         type: 3}
@@ -1334,6 +1384,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MimicTarget2D_Walk_MaxDOF_8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606139233621847716, guid: ddbdb251e8365de4e98dbc81d538f1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2606139233621847717, guid: ddbdb251e8365de4e98dbc81d538f1e5,
         type: 3}

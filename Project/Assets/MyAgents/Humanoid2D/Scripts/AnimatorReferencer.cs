@@ -79,7 +79,7 @@ namespace PhysicalCharacter2D
                 }
             }
             if (disableSpritesRender)
-            {         
+            {
                 var allSprites = agent2D.GetComponentsInChildren<SpriteRenderer>(true);
                 foreach (var sr in allSprites)
                 {
