@@ -10,17 +10,22 @@ PrefabInstance:
     - target: {fileID: 669210273248620520, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}
       propertyPath: m_Mass
-      value: 8
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 955303805598226730, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 91.938
       objectReference: {fileID: 0}
+    - target: {fileID: 965107014839836315, guid: 68ba6a7036a814541bdbd8ef488b971a,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 260679daf50ce6e4aaf2a83533bd4eae, type: 2}
     - target: {fileID: 1679029890100947117, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}
       propertyPath: m_Mass
-      value: 8
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 1694963010964671612, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}
@@ -179,6 +184,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4280703788621242130, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}
+      propertyPath: posDamping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280703788621242130, guid: 68ba6a7036a814541bdbd8ef488b971a,
+        type: 3}
+      propertyPath: rotDamping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280703788621242130, guid: 68ba6a7036a814541bdbd8ef488b971a,
+        type: 3}
+      propertyPath: posFrequency
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280703788621242130, guid: 68ba6a7036a814541bdbd8ef488b971a,
+        type: 3}
+      propertyPath: rotFrequency
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280703788621242130, guid: 68ba6a7036a814541bdbd8ef488b971a,
+        type: 3}
       propertyPath: m_TargetWalkingSpeed
       value: 4
       objectReference: {fileID: 0}
@@ -195,12 +220,22 @@ PrefabInstance:
     - target: {fileID: 4947421465824328294, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}
       propertyPath: m_Mass
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5046008427794049420, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 60.140003
+      objectReference: {fileID: 0}
+    - target: {fileID: 5423153847610637903, guid: 68ba6a7036a814541bdbd8ef488b971a,
+        type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5423153847610637903, guid: 68ba6a7036a814541bdbd8ef488b971a,
+        type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5718785521104335157, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}
@@ -215,18 +250,18 @@ PrefabInstance:
     - target: {fileID: 7386547379245977410, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}
       propertyPath: jointDampen
-      value: 5000
+      value: 3000
       objectReference: {fileID: 0}
     - target: {fileID: 7386547379245977410, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}
       propertyPath: maxJointSpring
-      value: 50000
+      value: 60000
       objectReference: {fileID: 0}
     - target: {fileID: 7386547379245977423, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 0e2a77ace5ede864ba5d06ab2446bdbb,
+      objectReference: {fileID: 5022602860645237092, guid: 14fc0ebb1e4b4fb469889be64b70e4e2,
         type: 3}
     - target: {fileID: 7386547379245977423, guid: 68ba6a7036a814541bdbd8ef488b971a,
         type: 3}

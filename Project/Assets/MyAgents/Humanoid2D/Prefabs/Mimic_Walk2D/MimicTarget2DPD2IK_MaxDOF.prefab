@@ -4351,7 +4351,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f67e18284aa873478b01cd84fa1ae04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableSpritesRender: 1
+  disableRefSpritesRender: 1
+  disableSpritesRender: 0
   agent2D: {fileID: 4345175846389135207}
   maxAnimationLength: 1.083
   footsLand: []
@@ -9477,6 +9478,12 @@ PrefabInstance:
       propertyPath: animatorReferencer
       value: 
       objectReference: {fileID: 338062829780954467}
+    - target: {fileID: 3279725472181483181, guid: b96716da4921f4a46bddcfbe823592ba,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 67c15d5859f2d0b4a9c1c9b0a3fb2102,
+        type: 3}
     - target: {fileID: 3279725472181483182, guid: b96716da4921f4a46bddcfbe823592ba,
         type: 3}
       propertyPath: m_RootOrder

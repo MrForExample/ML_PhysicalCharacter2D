@@ -8637,7 +8637,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cac3c9f82f759d649803f1c2e8573732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableSpritesRender: 1
+  disableRefSpritesRender: 1
+  disableSpritesRender: 0
   agent2D: {fileID: 776341197117686536}
   maxAnimationLength: 0.583
   endEffectorPos: []
@@ -9468,6 +9469,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2750490726452842597}
     m_Modifications:
+    - target: {fileID: 1397145346620905538, guid: 215691c02604eb044b3996b8b8ac3e25,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 7bc246e081946e14990a439b68c410a7,
+        type: 3}
     - target: {fileID: 1397145346620905540, guid: 215691c02604eb044b3996b8b8ac3e25,
         type: 3}
       propertyPath: m_RootOrder

@@ -59,6 +59,9 @@ public class WalkerAgent2D : Agent
     JointDriveController m_JdController;
     EnvironmentParameters m_ResetParams;
 
+    [HideInInspector]
+    public bool canMove = true;
+
     public override void Initialize()
     {
         m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
@@ -165,38 +168,41 @@ public class WalkerAgent2D : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        var bpDict = m_JdController.bodyPartsDict;
-        var i = -1;
+        if (canMove)
+        {
+            var bpDict = m_JdController.bodyPartsDict;
+            var i = -1;
 
-        var continuousActions = actionBuffers.ContinuousActions;
-        bpDict[spine].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            var continuousActions = actionBuffers.ContinuousActions;
+            bpDict[spine].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
 
-        bpDict[thighL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[thighR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[shinL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[shinR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[footR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[footL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[thighL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[thighR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[shinL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[shinR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[footR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[footL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
 
-        bpDict[armL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-        bpDict[armR].SetJointTargetRotation(continuousActions[++i], 0f, 0);
-        bpDict[forearmL].SetJointTargetRotation(continuousActions[++i], 0, 0);
-        bpDict[forearmR].SetJointTargetRotation(continuousActions[++i], 0, 0);
-        bpDict[head].SetJointTargetRotation(continuousActions[++i], 0f, 0);
+            bpDict[armL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+            bpDict[armR].SetJointTargetRotation(continuousActions[++i], 0f, 0);
+            bpDict[forearmL].SetJointTargetRotation(continuousActions[++i], 0, 0);
+            bpDict[forearmR].SetJointTargetRotation(continuousActions[++i], 0, 0);
+            bpDict[head].SetJointTargetRotation(continuousActions[++i], 0f, 0);
 
-        //update joint strength settings
-        bpDict[spine].SetJointStrength(continuousActions[++i]);
-        bpDict[head].SetJointStrength(continuousActions[++i]);
-        bpDict[thighL].SetJointStrength(continuousActions[++i]);
-        bpDict[shinL].SetJointStrength(continuousActions[++i]);
-        bpDict[footL].SetJointStrength(continuousActions[++i]);
-        bpDict[thighR].SetJointStrength(continuousActions[++i]);
-        bpDict[shinR].SetJointStrength(continuousActions[++i]);
-        bpDict[footR].SetJointStrength(continuousActions[++i]);
-        bpDict[armL].SetJointStrength(continuousActions[++i]);
-        bpDict[forearmL].SetJointStrength(continuousActions[++i]);
-        bpDict[armR].SetJointStrength(continuousActions[++i]);
-        bpDict[forearmR].SetJointStrength(continuousActions[++i]);
+            //update joint strength settings
+            bpDict[spine].SetJointStrength(continuousActions[++i]);
+            bpDict[head].SetJointStrength(continuousActions[++i]);
+            bpDict[thighL].SetJointStrength(continuousActions[++i]);
+            bpDict[shinL].SetJointStrength(continuousActions[++i]);
+            bpDict[footL].SetJointStrength(continuousActions[++i]);
+            bpDict[thighR].SetJointStrength(continuousActions[++i]);
+            bpDict[shinR].SetJointStrength(continuousActions[++i]);
+            bpDict[footR].SetJointStrength(continuousActions[++i]);
+            bpDict[armL].SetJointStrength(continuousActions[++i]);
+            bpDict[forearmL].SetJointStrength(continuousActions[++i]);
+            bpDict[armR].SetJointStrength(continuousActions[++i]);
+            bpDict[forearmR].SetJointStrength(continuousActions[++i]);   
+        }
     }
 
     //Update OrientationCube and DirectionIndicator

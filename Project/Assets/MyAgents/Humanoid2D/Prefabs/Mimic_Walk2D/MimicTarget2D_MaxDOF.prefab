@@ -4823,7 +4823,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd647111702da9a45b1bccb244983c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableSpritesRender: 1
+  disableRefSpritesRender: 1
+  disableSpritesRender: 0
   agent2D: {fileID: 4280703788621242130}
   maxAnimationLength: 0.583
   endEffectorPos: []
@@ -9507,6 +9508,32 @@ PrefabInstance:
     - target: {fileID: 1225127674089910505, guid: da714c10c0a56c0409f8b44e32b4829b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1225127674089910511, guid: da714c10c0a56c0409f8b44e32b4829b,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 5d2ac9e7aaeef424f8adb0aa86073b73,
+        type: 3}
+    - target: {fileID: 5542475380371071154, guid: da714c10c0a56c0409f8b44e32b4829b,
+        type: 3}
+      propertyPath: posDamping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542475380371071154, guid: da714c10c0a56c0409f8b44e32b4829b,
+        type: 3}
+      propertyPath: rotDamping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542475380371071154, guid: da714c10c0a56c0409f8b44e32b4829b,
+        type: 3}
+      propertyPath: posFrequency
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542475380371071154, guid: da714c10c0a56c0409f8b44e32b4829b,
+        type: 3}
+      propertyPath: rotFrequency
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5542475380371071154, guid: da714c10c0a56c0409f8b44e32b4829b,
