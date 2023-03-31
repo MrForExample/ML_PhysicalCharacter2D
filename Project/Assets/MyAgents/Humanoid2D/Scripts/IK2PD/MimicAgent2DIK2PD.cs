@@ -8,10 +8,11 @@ using Unity.MLAgents.Sensors;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 using Random = UnityEngine.Random;
 using EffectorReferencer = PhysicalCharacter2D.AnimatorReferencerIK2PD.EffectorReferencer;
+using SquidGame;
 
 namespace PhysicalCharacter2D
 {
-    public class MimicAgent2DIK2PD : Agent
+    public class MimicAgent2DIK2PD : Agent, SquidInterface
     {
         [Header("Reference motion")]
         public AnimatorReferencerIK2PD animatorReferencer;
@@ -53,6 +54,13 @@ namespace PhysicalCharacter2D
         [Header("Debug")]
         public bool isDebug = false;
 
+        [Header("Hips PD follow reference")]
+        public float posFrequency = 0f;
+        public float posDamping = 0f;
+        public float rotFrequency = 0f;
+        public float rotDamping = 0f;
+        float refLastPos;
+
         [HideInInspector]
         public GroundContact[] footsLand;
 
@@ -66,6 +74,32 @@ namespace PhysicalCharacter2D
         float totalMass;
 
         Transform[,] limbArrays;
+
+        // For squid game control
+        [HideInInspector]
+        public bool canMove = true;
+        public bool canAgentMove 
+        {
+            get {return canMove;}
+            set {canMove = value;}
+        }
+        public void TurnOnOrOffSupport(bool supportOn)
+        {
+            if (supportOn)
+            {
+                posFrequency = rotFrequency = 100f;
+                posDamping = rotDamping = 1f;
+            }
+            else
+            {
+                posFrequency = posDamping = rotFrequency = rotDamping = 0f;
+            }
+        }
+        float maxJointSpring;
+        public void TurnOnOrOffJoints(bool jointsOn)
+        {
+            m_JdController.maxJointSpring = jointsOn ? maxJointSpring : 0f;
+        }
 
         public override void Initialize()
         {
@@ -120,6 +154,8 @@ namespace PhysicalCharacter2D
             totalMass = 0f;
             foreach (var bp in m_JdController.bodyPartsDict.Values)
                 totalMass += bp.rb.mass;
+
+            maxJointSpring = m_JdController.maxJointSpring;
         }
 
         /// <summary>
@@ -136,6 +172,8 @@ namespace PhysicalCharacter2D
             UpdateOrientationObjects();
 
             ReferenceStateInitialization();
+
+            refLastPos = animatorReferencer.bodyReferencersDict[hips.name].bodyLastPosition.y;
         }
         void ReferenceStateInitialization()
         {
@@ -242,32 +280,35 @@ namespace PhysicalCharacter2D
 
         public override void OnActionReceived(ActionBuffers actionBuffers)
         {
-            var bpDict = m_JdController.bodyPartsDict;
-            var continuousActions = actionBuffers.ContinuousActions;
-            var i = -1;
-
-            bpDict[spine].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-            bpDict[head].SetJointTargetRotation(continuousActions[++i], 0f, 0);
-            bpDict[footL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-            bpDict[footR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-            bpDict[handL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-            bpDict[handR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
-
-            foreach (var limb in allPhysicalLimbs)
+            if (canMove)
             {
-                limb.LimbIKMoveToTargrtPoint(limb.CalculateTargetEndPoint(continuousActions[++i], continuousActions[++i]), Time.fixedDeltaTime);
-            }
-            
-            bpDict[spine].SetJointStrength(continuousActions[++i]);
-            bpDict[head].SetJointStrength(continuousActions[++i]);
+                var bpDict = m_JdController.bodyPartsDict;
+                var continuousActions = actionBuffers.ContinuousActions;
+                var i = -1;
 
-            for (int iLimb = 0; iLimb < 4; iLimb++)
-            {
-                float limbStrength = continuousActions[++i];
-                for (int iJoint = 0; iJoint < 3; iJoint++)
-                    bpDict[limbArrays[iLimb, iJoint]].SetJointStrength(limbStrength);
+                bpDict[spine].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+                bpDict[head].SetJointTargetRotation(continuousActions[++i], 0f, 0);
+                bpDict[footL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+                bpDict[footR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+                bpDict[handL].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+                bpDict[handR].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+
+                foreach (var limb in allPhysicalLimbs)
+                {
+                    limb.LimbIKMoveToTargrtPoint(limb.CalculateTargetEndPoint(continuousActions[++i], continuousActions[++i]), Time.fixedDeltaTime);
+                }
+                
+                bpDict[spine].SetJointStrength(continuousActions[++i]);
+                bpDict[head].SetJointStrength(continuousActions[++i]);
+
+                for (int iLimb = 0; iLimb < 4; iLimb++)
+                {
+                    float limbStrength = continuousActions[++i];
+                    for (int iJoint = 0; iJoint < 3; iJoint++)
+                        bpDict[limbArrays[iLimb, iJoint]].SetJointStrength(limbStrength);
+                }
+                // action size: 20
             }
-            // action size: 20
         }
 
         void UpdateOrientationObjects()
@@ -278,13 +319,19 @@ namespace PhysicalCharacter2D
         float wi = 0.7f, wg = 0.3f;
         void FixedUpdate()
         {
-            UpdateOrientationObjects();
+            if (canMove)
+            {
+                UpdateOrientationObjects();
 
-            float ri = CalculateImitationReward();
-            float rg = CalculateTaskReward();
-            AddReward(wi * ri + wg * rg);
+                float ri = CalculateImitationReward();
+                float rg = CalculateTaskReward();
+                AddReward(wi * ri + wg * rg);
 
-            animatorReferencer.RecordAllBodiesLastTarget();
+                var refHips = animatorReferencer.bodyReferencersDict[hips.name];
+                HipsRbPDFollowRef(refHips.bodyLastPosition.y, refHips.bodyLastQuaternion, m_JdController.bodyPartsDict[hips].rb, Time.fixedDeltaTime);
+
+                animatorReferencer.RecordAllBodiesLastTarget();
+            }
         }
         float wp = 0.35f, wv = 0.1f, we = 0.35f, wc = 0.1f, wl = 0.1f;
         float wps = -2f, wvs = -4f, wes = -4f, wcs = -10f, wls = -10f;
@@ -402,6 +449,19 @@ namespace PhysicalCharacter2D
             //return the value on a declining sigmoid shaped curve that decays from 1 to 0
             //This reward will approach 1 if it matches perfectly and approach zero as it deviates
             return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / targetWalkingSpeed, 2), 2);
+        }
+        void HipsRbPDFollowRef(float refPosY, Quaternion refRotation, Rigidbody rb, float deltaTime)
+        {
+            // Vertical PD Follow
+            float targetPos = refPosY;
+            float targetVel = (targetPos - refLastPos) / deltaTime;
+            float targetForce = CommonFunctions.CalculatePDForce1DStable(targetPos, targetVel, rb.position.y, rb.velocity.y, posFrequency, posDamping, deltaTime);
+            rb.AddForce(new Vector3(0f, targetForce));
+            refLastPos = targetPos;
+
+            // Rotation PD Follow
+            Vector3 targetTorque = CommonFunctions.CalculatePDTorque(refRotation, rb.transform.rotation, rb, rotFrequency, rotDamping, deltaTime);
+            rb.AddTorque(targetTorque);
         }
 
         void OnDrawGizmos()

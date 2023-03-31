@@ -6,10 +6,11 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgentsExamples;
 using Unity.MLAgents.Sensors;
 using Random = UnityEngine.Random;
+using SquidGame;
 
 namespace PhysicalCharacter2D
 {
-    public class MimicAgent2DPDFeedback : Agent
+    public class MimicAgent2DPDFeedback : Agent, SquidInterface
     {
         [Header("Reference motion")]
         public AnimatorReferencerPDFeedback animatorReferencer;
@@ -78,8 +79,31 @@ namespace PhysicalCharacter2D
         public List<BodyPartPDFeedback> allBodiesButHips = new List<BodyPartPDFeedback>();
         float totalMass;
 
+        // For squid game control
         [HideInInspector]
         public bool canMove = true;
+        public bool canAgentMove 
+        {
+            get {return canMove;}
+            set {canMove = value;}
+        }
+        public void TurnOnOrOffSupport(bool supportOn)
+        {
+            if (supportOn)
+            {
+                posFrequency = rotFrequency = 100f;
+                posDamping = rotDamping = 1f;
+            }
+            else
+            {
+                posFrequency = posDamping = rotFrequency = rotDamping = 0f;
+            }
+        }
+        float maxJointSpring;
+        public void TurnOnOrOffJoints(bool jointsOn)
+        {
+            m_JdController.maxJointSpring = jointsOn ? maxJointSpring : 0f;
+        }
 
         public override void Initialize()
         {
@@ -124,7 +148,8 @@ namespace PhysicalCharacter2D
 
                 totalMass += bp.rb.mass;
             }
-                
+
+            maxJointSpring = m_JdController.maxJointSpring;
         }
 
         /// <summary>
