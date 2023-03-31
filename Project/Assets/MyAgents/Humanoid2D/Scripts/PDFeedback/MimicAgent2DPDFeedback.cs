@@ -197,8 +197,8 @@ namespace PhysicalCharacter2D
             else
             {
                 // Add root height for both reference and simulated agent 
-                sensor.AddObservation(refBp.bodyLastPosition.y);
-                sensor.AddObservation(hips.position.y);
+                sensor.AddObservation(refBp.bodyLastPosition.y - refBp.bodyTransform.root.position.y);
+                sensor.AddObservation(hips.position.y - transform.root.position.y);
                 // state size: 20
             }
         }

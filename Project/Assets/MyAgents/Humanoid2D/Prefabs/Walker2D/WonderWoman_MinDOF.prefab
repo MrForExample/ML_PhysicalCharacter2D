@@ -2054,6 +2054,7 @@ MonoBehaviour:
   - {fileID: 0}
   m_JdController: {fileID: 0}
   endEffectors: []
+  canMove: 1
 --- !u!114 &5257784559632527193
 MonoBehaviour:
   m_ObjectHideFlags: 0
