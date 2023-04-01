@@ -17,33 +17,29 @@ namespace SquidGame
         bool canAgentsMove = true;
         List<SquidInterface> allSquidGamers = new List<SquidInterface>();
 
-        KeyCode[] keypadCodes = new KeyCode[]
-        {
-            KeyCode.Alpha1,
-            KeyCode.Alpha2,
-            KeyCode.Alpha3,
-            KeyCode.Alpha4,
-            KeyCode.Alpha5,
-            KeyCode.Alpha6,
-            KeyCode.Alpha7,
-            KeyCode.Alpha8,
-            KeyCode.Alpha9
-        };
+        int currentTargetIndex = 0;
 
         void Start()
         {
             cameraFollow = GetComponent<CameraFollow>();
+            foreach (var t in cameraChangeTargets)
+            {
+                allSquidGamers.Add(t.GetComponentInParent<SquidInterface>());
+            }
 
+            /*
             var sIs = FindObjectsOfType<Agent>().OfType<SquidInterface>();
             foreach (SquidInterface sI in sIs) 
             {
                 allSquidGamers.Add(sI);
             }
+            */
         }
 
         // Update is called once per frame
         void Update()
         {
+            // Stop
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 canAgentsMove = !canAgentsMove;
@@ -70,18 +66,25 @@ namespace SquidGame
                 }
             }
 
-            for (int i = 0; i < 9; i++)
+            // Kill
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                if (Input.GetKeyDown(keypadCodes[i]))
-                {
-                    ChangeCameraTarget(i);
-                }
+                allSquidGamers[currentTargetIndex].TurnOnOrOffJoints(false);
+            }
+            else if (Input.GetKeyDown(KeyCode.R))
+            {
+                var gamer = allSquidGamers[currentTargetIndex];
+                gamer.TurnOnOrOffJoints(true);
+                gamer.TurnOnOrOffSupport(true);
+                nowSupportTime = maxSupportTime;
             }
         }
 
+        // Using on UI, click avatar to change target
         public void ChangeCameraTarget(int i)
         {
             cameraFollow.target = cameraChangeTargets[i];
+            currentTargetIndex = i;
         }
     }
 }

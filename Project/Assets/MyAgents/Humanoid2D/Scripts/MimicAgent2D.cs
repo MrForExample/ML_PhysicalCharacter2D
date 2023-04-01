@@ -75,6 +75,8 @@ namespace PhysicalCharacter2D
         DecisionRequester decisionRequester;
 
         [HideInInspector]
+        public BodyPart[] controlParts;
+        [HideInInspector]
         public BodyPart[] endEffectors;
         float totalMass;
 
@@ -98,10 +100,50 @@ namespace PhysicalCharacter2D
                 posFrequency = posDamping = rotFrequency = rotDamping = 0f;
             }
         }
-        float maxJointSpring;
+
+        float[] lastJointStrength = new float[12];
         public void TurnOnOrOffJoints(bool jointsOn)
         {
-            m_JdController.maxJointSpring = jointsOn ? maxJointSpring : 0f;
+            if (jointsOn)
+            {
+                if (!canMove)
+                {
+                    for (int iP = 0; iP < controlParts.Length; iP++)
+                    {
+                        float strength = 2f * lastJointStrength[iP] / m_JdController.maxJointForceLimit - 1f;
+                        controlParts[iP].SetJointStrength(strength);
+                    }
+
+                    foreach (var col in hips.GetComponentsInChildren<Collider>())
+                        col.sharedMaterial = null;
+
+                    canMove = true;                    
+                }
+            }
+            else if (canMove)
+            {
+                for (int iP = 0; iP < controlParts.Length; iP++)
+                {
+                    var bp = controlParts[iP];
+                    lastJointStrength[iP] = bp.joint.slerpDrive.maximumForce;
+                    bp.SetJointStrength(-0.95f);
+                }
+
+                // Change physic material to make it bounds
+                PhysicMaterial physicMaterial = new PhysicMaterial();
+                physicMaterial.staticFriction = 0.6f;
+                physicMaterial.dynamicFriction = 0.6f;
+                physicMaterial.bounciness = 0.6f;
+                physicMaterial.bounceCombine = PhysicMaterialCombine.Maximum;
+
+                foreach (var col in hips.GetComponentsInChildren<Collider>())
+                    col.sharedMaterial = physicMaterial;
+
+                m_JdController.bodyPartsDict[hips].rb.AddForce(Vector3.up * 600f, ForceMode.Impulse);
+                m_JdController.bodyPartsDict[head].rb.AddForce(Vector3.up * 600f, ForceMode.Impulse);
+
+                canMove = false;
+            }
         }
 
         public override void Initialize()
@@ -133,17 +175,32 @@ namespace PhysicalCharacter2D
 
             m_ResetParams = Academy.Instance.EnvironmentParameters;
 
-            endEffectors = new BodyPart[5]{m_JdController.bodyPartsDict[handL], 
-                                        m_JdController.bodyPartsDict[handR], 
-                                        m_JdController.bodyPartsDict[footL], 
-                                        m_JdController.bodyPartsDict[footR],
-                                        m_JdController.bodyPartsDict[head]};
+
+            var bpDict = m_JdController.bodyPartsDict;
+            controlParts = new BodyPart[12]{
+                bpDict[spine],
+                bpDict[head],
+                bpDict[thighL],
+                bpDict[shinL],
+                bpDict[footL],
+                bpDict[thighR],
+                bpDict[shinR],
+                bpDict[footR],
+                bpDict[armL],
+                bpDict[forearmL],
+                bpDict[armR],
+                bpDict[forearmR]
+            };
+
+            endEffectors = new BodyPart[5]{bpDict[handL], 
+                                        bpDict[handR], 
+                                        bpDict[footL], 
+                                        bpDict[footR],
+                                        bpDict[head]};
 
             totalMass = 0f;
-            foreach (var bp in m_JdController.bodyPartsDict.Values)
+            foreach (var bp in bpDict.Values)
                 totalMass += bp.rb.mass;
-
-            maxJointSpring = m_JdController.maxJointSpring;
         }
 
         /// <summary>
@@ -274,19 +331,15 @@ namespace PhysicalCharacter2D
                 bpDict[forearmR].SetJointTargetRotation(continuousActions[++i], 0, 0);
                 bpDict[head].SetJointTargetRotation(continuousActions[++i], 0f, 0);
 
-                //update joint strength settings
-                bpDict[spine].SetJointStrength(continuousActions[++i]);
-                bpDict[head].SetJointStrength(continuousActions[++i]);
-                bpDict[thighL].SetJointStrength(continuousActions[++i]);
-                bpDict[shinL].SetJointStrength(continuousActions[++i]);
-                bpDict[footL].SetJointStrength(continuousActions[++i]);
-                bpDict[thighR].SetJointStrength(continuousActions[++i]);
-                bpDict[shinR].SetJointStrength(continuousActions[++i]);
-                bpDict[footR].SetJointStrength(continuousActions[++i]);
-                bpDict[armL].SetJointStrength(continuousActions[++i]);
-                bpDict[forearmL].SetJointStrength(continuousActions[++i]);
-                bpDict[armR].SetJointStrength(continuousActions[++i]);
-                bpDict[forearmR].SetJointStrength(continuousActions[++i]);
+                /*
+                //update joint rotation
+                for (int iP = 0; iP < controlParts.Length; iP++)
+                    controlParts[iP].SetJointTargetRotation(continuousActions[++i], 0f, 0f);
+                */
+
+                //update joint strength
+                for (int iP = 0; iP < controlParts.Length; iP++)
+                    controlParts[iP].SetJointStrength(continuousActions[++i]);
             }
         }
 

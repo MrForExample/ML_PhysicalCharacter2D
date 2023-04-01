@@ -95,10 +95,33 @@ namespace PhysicalCharacter2D
                 posFrequency = posDamping = rotFrequency = rotDamping = 0f;
             }
         }
-        float maxJointSpring;
+        float maxJointForceLimit;
         public void TurnOnOrOffJoints(bool jointsOn)
         {
-            m_JdController.maxJointSpring = jointsOn ? maxJointSpring : 0f;
+            if (jointsOn)
+            {
+                m_JdController.maxJointForceLimit = maxJointForceLimit;
+
+                foreach (var col in hips.GetComponentsInChildren<Collider>())
+                    col.sharedMaterial = null;
+            }
+            else
+            {
+                m_JdController.maxJointForceLimit = 10f;
+
+                // Change physic material to make it bounds
+                PhysicMaterial physicMaterial = new PhysicMaterial();
+                physicMaterial.staticFriction = 0.6f;
+                physicMaterial.dynamicFriction = 0.6f;
+                physicMaterial.bounciness = 0.6f;
+                physicMaterial.bounceCombine = PhysicMaterialCombine.Maximum;
+
+                foreach (var col in hips.GetComponentsInChildren<Collider>())
+                    col.sharedMaterial = physicMaterial;
+
+                m_JdController.bodyPartsDict[hips].rb.AddForce(Vector3.up * 600f, ForceMode.Impulse);
+                m_JdController.bodyPartsDict[head].rb.AddForce(Vector3.up * 600f, ForceMode.Impulse);
+            }
         }
 
         public override void Initialize()
@@ -155,7 +178,7 @@ namespace PhysicalCharacter2D
             foreach (var bp in m_JdController.bodyPartsDict.Values)
                 totalMass += bp.rb.mass;
 
-            maxJointSpring = m_JdController.maxJointSpring;
+            maxJointForceLimit = m_JdController.maxJointForceLimit;
         }
 
         /// <summary>
@@ -231,7 +254,7 @@ namespace PhysicalCharacter2D
                 
                 Vector2 posDiff = bp.rb.position - hips.position;
                 sensor.AddObservation(posDiff);
-                sensor.AddObservation(bp.currentStrength / m_JdController.maxJointForceLimit);
+                sensor.AddObservation(bp.currentStrength / maxJointForceLimit);
                 // state size: 20
             }
             else
