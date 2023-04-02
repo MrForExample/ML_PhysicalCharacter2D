@@ -5,6 +5,7 @@ using PhysicalCharacter2D;
 using System.Linq;
 using Unity.MLAgents;
 using Unity.MLAgentsExamples;
+using ParticleEffect;
 
 namespace SquidGame
 {
@@ -12,12 +13,17 @@ namespace SquidGame
     {
         CameraFollow cameraFollow;
         public Transform[] cameraChangeTargets;
+        public GameObject[] killUIs;
         const float maxSupportTime = 1f;
         float nowSupportTime = 0f;
+
+        const float maxKillWaitTime = 1f;
+        float nowKillWaitTime = 0f;
+
         bool canAgentsMove = true;
         List<SquidInterface> allSquidGamers = new List<SquidInterface>();
 
-        int currentTargetIndex = 0;
+        int currentTargetIndex = 0, lastKillIndex;
 
         void Start()
         {
@@ -66,17 +72,33 @@ namespace SquidGame
                 }
             }
 
-            // Kill
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (nowKillWaitTime > 0f)
             {
-                allSquidGamers[currentTargetIndex].TurnOnOrOffJoints(false);
+                nowKillWaitTime -= Time.deltaTime;
+                if (nowKillWaitTime <= 0f)
+                {
+                    allSquidGamers[lastKillIndex].TurnOnOrOffJoints(false);
+                    killUIs[lastKillIndex].SetActive(true);
+                }
             }
-            else if (Input.GetKeyDown(KeyCode.R))
+            else
             {
-                var gamer = allSquidGamers[currentTargetIndex];
-                gamer.TurnOnOrOffJoints(true);
-                gamer.TurnOnOrOffSupport(true);
-                nowSupportTime = maxSupportTime;
+                // Kill
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    lastKillIndex = currentTargetIndex;
+                    nowKillWaitTime = maxKillWaitTime;
+                    (allSquidGamers[lastKillIndex] as Agent).GetComponentInChildren<SpecificSpawnPart>().ScaleAndStart();
+                }
+                else if (Input.GetKeyDown(KeyCode.R))
+                {
+                    var gamer = allSquidGamers[currentTargetIndex];
+                    gamer.TurnOnOrOffJoints(true);
+                    gamer.TurnOnOrOffSupport(true);
+                    nowSupportTime = maxSupportTime;
+
+                    killUIs[currentTargetIndex].SetActive(false);
+                }
             }
         }
 

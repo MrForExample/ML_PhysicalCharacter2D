@@ -86,7 +86,7 @@ namespace PhysicalCharacter2D
         public bool canAgentMove 
         {
             get {return canMove;}
-            set {canMove = value;}
+            set {canMove = value && isAlive;}
         }
         public void TurnOnOrOffSupport(bool supportOn)
         {
@@ -101,49 +101,59 @@ namespace PhysicalCharacter2D
             }
         }
 
+        bool isAlive = true;
         float[] lastJointStrength = new float[12];
         public void TurnOnOrOffJoints(bool jointsOn)
         {
             if (jointsOn)
             {
-                if (!canMove)
+                if (!isAlive)
                 {
                     for (int iP = 0; iP < controlParts.Length; iP++)
                     {
-                        float strength = 2f * lastJointStrength[iP] / m_JdController.maxJointForceLimit - 1f;
+                        float strength = jointStrengthToAlpha(lastJointStrength[iP]);
                         controlParts[iP].SetJointStrength(strength);
                     }
 
                     foreach (var col in hips.GetComponentsInChildren<Collider>())
                         col.sharedMaterial = null;
 
-                    canMove = true;                    
+                    isAlive = true;
+                    canMove = true;   
                 }
             }
-            else if (canMove)
+            else 
             {
-                for (int iP = 0; iP < controlParts.Length; iP++)
+                if (isAlive)
                 {
-                    var bp = controlParts[iP];
-                    lastJointStrength[iP] = bp.joint.slerpDrive.maximumForce;
-                    bp.SetJointStrength(-0.95f);
+                    for (int iP = 0; iP < controlParts.Length; iP++)
+                    {
+                        var bp = controlParts[iP];
+                        lastJointStrength[iP] = bp.joint.slerpDrive.maximumForce;
+                        bp.SetJointStrength(jointStrengthToAlpha(30f));
+                    }
+
+                    // Change physic material to make it bounds
+                    PhysicMaterial physicMaterial = new PhysicMaterial();
+                    physicMaterial.staticFriction = 0.6f;
+                    physicMaterial.dynamicFriction = 0.6f;
+                    physicMaterial.bounciness = 0.6f;
+                    physicMaterial.bounceCombine = PhysicMaterialCombine.Maximum;
+
+                    foreach (var col in hips.GetComponentsInChildren<Collider>())
+                        col.sharedMaterial = physicMaterial;
+
+                    isAlive = false;
+                    canMove = false;
                 }
 
-                // Change physic material to make it bounds
-                PhysicMaterial physicMaterial = new PhysicMaterial();
-                physicMaterial.staticFriction = 0.6f;
-                physicMaterial.dynamicFriction = 0.6f;
-                physicMaterial.bounciness = 0.6f;
-                physicMaterial.bounceCombine = PhysicMaterialCombine.Maximum;
-
-                foreach (var col in hips.GetComponentsInChildren<Collider>())
-                    col.sharedMaterial = physicMaterial;
-
-                m_JdController.bodyPartsDict[hips].rb.AddForce(Vector3.up * 600f, ForceMode.Impulse);
-                m_JdController.bodyPartsDict[head].rb.AddForce(Vector3.up * 600f, ForceMode.Impulse);
-
-                canMove = false;
+                m_JdController.bodyPartsDict[hips].rb.AddForce(Vector3.up * 400f, ForceMode.Impulse);
+                m_JdController.bodyPartsDict[head].rb.AddForce(Vector3.up * 400f, ForceMode.Impulse);
             }
+        }
+        float jointStrengthToAlpha(float desireJointStrength)
+        {
+            return 2f * desireJointStrength / m_JdController.maxJointForceLimit - 1f;
         }
 
         public override void Initialize()

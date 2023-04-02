@@ -107,7 +107,7 @@ namespace PhysicalCharacter2D
             }
             else
             {
-                m_JdController.maxJointForceLimit = 10f;
+                m_JdController.maxJointForceLimit = 30f;
 
                 // Change physic material to make it bounds
                 PhysicMaterial physicMaterial = new PhysicMaterial();
@@ -119,8 +119,8 @@ namespace PhysicalCharacter2D
                 foreach (var col in hips.GetComponentsInChildren<Collider>())
                     col.sharedMaterial = physicMaterial;
 
-                m_JdController.bodyPartsDict[hips].rb.AddForce(Vector3.up * 600f, ForceMode.Impulse);
-                m_JdController.bodyPartsDict[head].rb.AddForce(Vector3.up * 600f, ForceMode.Impulse);
+                m_JdController.bodyPartsDict[hips].rb.AddForce(Vector3.up * 400f, ForceMode.Impulse);
+                m_JdController.bodyPartsDict[head].rb.AddForce(Vector3.up * 400f, ForceMode.Impulse);
             }
         }
 

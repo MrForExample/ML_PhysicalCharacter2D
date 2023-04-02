@@ -1,0 +1,18 @@
+{
+    "name": "ParticleEffect",
+    "rootNamespace": "DreamTouch2D",
+    "references": [
+        "GUID:52fe4a8039bf1a94db22f6911095287c",
+        "GUID:1698183265921ca4a892908fac3915b7",
+        "GUID:d318d9cb9df94414b971e1f347ccf821"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
