@@ -6,12 +6,15 @@ using System.Linq;
 using Unity.MLAgents;
 using Unity.MLAgentsExamples;
 using ParticleEffect;
+using TheraBytes.BetterUi;
 
 namespace SquidGame
 {
     public class SquidGameMaster : MonoBehaviour
     {
         CameraFollow cameraFollow;
+        public Transform goal;
+        public BetterText goalDistanceText;
         public Transform[] cameraChangeTargets;
         public GameObject[] killUIs;
         const float maxSupportTime = 1f;
@@ -48,17 +51,12 @@ namespace SquidGame
             // Stop
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                canAgentsMove = !canAgentsMove;
-                foreach (var gamer in allSquidGamers)
-                {
-                    gamer.canAgentMove = canAgentsMove;
-                }
+                SetCanMove(!canAgentsMove);
 
                 if (canAgentsMove)
                 {
                     nowSupportTime = maxSupportTime;
-                    foreach (var gamer in allSquidGamers)
-                        gamer.TurnOnOrOffSupport(true);
+                    SetSupport(true);
                 }
             }
 
@@ -67,8 +65,7 @@ namespace SquidGame
                 nowSupportTime -= Time.deltaTime;
                 if (nowSupportTime <= 0f)
                 {
-                    foreach (var gamer in allSquidGamers)
-                        gamer.TurnOnOrOffSupport(false);
+                    SetSupport(false);
                 }
             }
 
@@ -100,8 +97,22 @@ namespace SquidGame
                     killUIs[currentTargetIndex].SetActive(false);
                 }
             }
+
+            float targetDistance = goal.position.x - cameraChangeTargets[currentTargetIndex].position.x;
+            goalDistanceText.text = targetDistance.ToString("F1") + "m";
         }
 
+        public void SetCanMove(bool canMove)
+        {
+            canAgentsMove = canMove;
+            foreach (var gamer in allSquidGamers)
+                gamer.canAgentMove = canAgentsMove;
+        }
+        public void SetSupport(bool canSupport)
+        {
+            foreach (var gamer in allSquidGamers)
+                gamer.TurnOnOrOffSupport(canSupport);
+        }
         // Using on UI, click avatar to change target
         public void ChangeCameraTarget(int i)
         {
